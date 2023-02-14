@@ -1,0 +1,44 @@
+{
+  "name": "drupal/webpatches",
+  "description": "Modules Patches.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/webpatches",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Webship",
+      "homepage": "http://webship.org",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/webpatches",
+    "source": "http://cgit.drupalcode.org/webpatches"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/10"
+    }
+  },
+  "require": {
+    "composer/installers": "~2.0",
+    "oomphinc/composer-installers-extender": "~2.0",
+    "cweagans/composer-patches": "~1.0",
+    "drupal/default_content": "~2.0"
+  },
+  "extra": {
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+    "patchLevel": {
+      "drupal/core": "-p2"
+    },
+    "patches": {
+      "drupal/default_content": {
+        "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
+        "https://www.drupal.org/files/issues/2021-04-07/3160146-37.patch"
+      }
+    }
+  }
+}
