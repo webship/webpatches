@@ -1,0 +1,18 @@
+diff --git a/gin_login.module b/gin_login.module
+index 21d3e88b1bcc369bd342df81791af5b603e7db67..b4b7740b89948caa0544dea309418b49751691d0 100644
+--- a/gin_login.module
++++ b/gin_login.module
+@@ -47,9 +47,12 @@ function gin_login_page_attachments_alter(&$page) {
+       $page['#attached']['drupalSettings']['gin']['highcontrastmode_class'] = 'gin--high-contrast-mode';
+     }
+ 
++    /** @var \Symfony\Component\HttpFoundation\Request $origin_url */
++    $origin_url = \Drupal::request()->getSchemeAndHttpHost() . \Drupal::request()->getBaseUrl();
++
+     // Expose Gin Login settings to JS.
+     $path = \Drupal::service('extension.list.module')->getPath('gin_login');
+-    $page['#attached']['drupalSettings']['gin_login']['path'] = '/' . $path;
++    $page['#attached']['drupalSettings']['gin_login']['path'] = $origin_url . '/' . $path;
+ 
+     // Add login library.
+     $page['#attached']['library'][] = 'gin_login/login';
