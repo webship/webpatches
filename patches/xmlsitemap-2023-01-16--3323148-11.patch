@@ -1,0 +1,49 @@
+diff --git a/xmlsitemap.module b/xmlsitemap.module
+--- a/xmlsitemap.module
++++ b/xmlsitemap.module
+@@ -2341,25 +2341,35 @@
+   $messages = &drupal_static(__FUNCTION__);
+
+   if (!isset($messages)) {
++    $moduleHandler = \Drupal::moduleHandler();
++
+     // Cache the list of modules that are checked.
+-    if ($cache = \Drupal::cache()->get('xmlsitemap:registry:requirements')) {
++    if ($cache = \Drupal::cache('bootstrap')->get('xmlsitemap:registry:requirements')) {
+       $modules = $cache->data;
+     }
+     else {
+-      $modules = [];
+-      \Drupal::moduleHandler()->loadAllIncludes('install');
+-      foreach (\Drupal::moduleHandler()->getImplementations('requirements') as $module) {
+-        if (strpos($module, 'xmlsitemap') !== FALSE) {
+-          $modules[] = $module;
++      $moduleHandler->loadAllIncludes('install');
++      $modules = array_keys($moduleHandler->getModuleList());
++      $modules = array_filter($modules, function ($module) use ($moduleHandler) {
++        if (strpos($module, 'xmlsitemap') === FALSE) {
++          return FALSE;
+         }
+-      }
+-      \Drupal::cache()->set('xmlsitemap:registry:requirements', $modules, Cache::PERMANENT, ['xmlsitemap']);
++        elseif (!method_exists($moduleHandler, 'hasImplementations')) {
++          // @todo Remove this check once we require Drupal 9.4+.
++          return $moduleHandler->implementsHook($module, 'requirements');
++        }
++        else {
++          return $moduleHandler->hasImplementations('requirements', $module);
++        }
++      });
++      \Drupal::cache('bootstrap')->set('xmlsitemap:registry:requirements', $modules, Cache::PERMANENT, ['xmlsitemap']);
+     }
+
+     $messages = [];
++    require_once DRUPAL_ROOT . '/core/includes/install.inc';
+     foreach ($modules as $module) {
+-      \Drupal::moduleHandler()->loadInclude($module, 'install');
+-      $requirements = \Drupal::moduleHandler()->invoke($module, 'requirements', ['runtime']);
++      $moduleHandler->loadInclude($module, 'install');
++      $requirements = $moduleHandler->invoke($module, 'requirements', ['runtime']);
+       foreach ($requirements as $requirement) {
+         if (isset($requirement['severity']) && max(REQUIREMENT_OK, $requirement['severity'])) {
+           $messages[] = $requirement['description'];
