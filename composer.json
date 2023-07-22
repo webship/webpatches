@@ -25,8 +25,7 @@
   "require": {
     "composer/installers": "~2.0",
     "oomphinc/composer-installers-extender": "~2.0",
-    "cweagans/composer-patches": "~1.0",
-    "drupal/default_content": "~2.0"
+    "cweagans/composer-patches": "~1.0"
   },
   "extra": {
     "enable-patching": true,
@@ -35,10 +34,6 @@
       "drupal/core": "-p2"
     },
     "patches": {
-      "drupal/gin_login": {
-        "Issue #3342318: Fix Gin Login Wallpaper images with the Origin URL (scheme and HTTP host) of the site":
-        "web/modules/contrib/webpatches/patches/gin_login-2023-02-16--3342318-19.diff"
-      },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
