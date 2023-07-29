@@ -36,11 +36,11 @@
     "patches": {
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
-        "[web-root]/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
+        "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
       },
       "drupal/xmlsitemap": {
         "Issue #3323148: Error: Call to undefined method Drupal\\Core\\Extension\\ModuleHandler::getImplementations() in xmlsitemap_check_status()": 
-        "[web-root]/modules/contrib/webpatches/patches/xmlsitemap-2023-01-16--3323148-11.patch"
+        "web/modules/contrib/webpatches/patches/xmlsitemap-2023-01-16--3323148-11.patch"
       }
     }
   }
