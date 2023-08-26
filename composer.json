@@ -40,10 +40,6 @@
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
-      },
-      "drupal/ace_editor": {
-        "Issue #3365101: Reopen: Using ace editor with field ui throws error": 
-        "web/modules/contrib/webpatches/patches/ace_editor_2023_08_18--3365101-5.diff"
       }
     }
   }
