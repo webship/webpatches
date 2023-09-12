@@ -1,0 +1,14 @@
+diff --git a/templates/views-accordion-view.html.twig b/templates/views-accordion-view.html.twig
+index 2b13732..b3ed54f 100644
+--- a/templates/views-accordion-view.html.twig
++++ b/templates/views-accordion-view.html.twig
+@@ -28,4 +28,9 @@
+   <div{{ row.attributes.addClass(row_classes) }}>
+     {{ row.content }}
+   </div>
++
++  {% if row.attributes.hasClass('gherkin-script') %}
++    </div></div>
++  {% endif %}
++  
+ {% endfor %}
