@@ -43,7 +43,7 @@
       },
       "drupal/views_accordion": {
         "Issue #3386875: Add patch for view accordion has gherkin script field": 
-        "web/modules/contrib/webpatches/patches/patches/views_accordion-3386875.patch"
+        "web/modules/contrib/webpatches/patches/views_accordion-3386875.patch"
       }
     }
   }
