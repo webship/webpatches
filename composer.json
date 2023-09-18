@@ -40,10 +40,6 @@
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
-      },
-      "drupal/views_accordion": {
-        "Issue #3386875: Add patch for view accordion has gherkin script field": 
-        "web/modules/contrib/webpatches/patches/views_accordion-3386875.patch"
       }
     }
   }
