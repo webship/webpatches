@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/Field/FieldFormatter/AceFormatter.php b/src/Plugin/Field/FieldFormatter/AceFormatter.php
+index ac33a71..b6ef2a5 100644
+--- a/src/Plugin/Field/FieldFormatter/AceFormatter.php
++++ b/src/Plugin/Field/FieldFormatter/AceFormatter.php
+@@ -224,7 +224,7 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
+           'readonly' => 'readonly',
+         ],
+         '#prefix' => '<div class="ace_formatter">',
+-        '#suffix' => '<div>',
++        '#suffix' => '</div>',
+       ];
+     }
+     return $elements;
