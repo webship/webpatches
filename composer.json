@@ -37,13 +37,13 @@
       "web-root": "web/"
     },
     "patches": {
-      "drupal/default_content": {
-        "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
-        "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
-      },
       "drupal/ace_editor": {
         "Issue #3388322: HTML error when textarea view field has ace format": 
         "web/modules/contrib/webpatches/patches/ace_editor-2023-09-19--3388322-2.patch"
+      },
+      "drupal/default_content": {
+        "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
+        "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
       }
     }
   }
