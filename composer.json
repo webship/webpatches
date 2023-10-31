@@ -40,6 +40,10 @@
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
+      },
+      "drupal/distributions_recipes": {
+        "Issue #3301370: Model core's standard install profile as recipes": 
+        "web/modules/contrib/webpatches/patches/distributions_recipes-2023-06-20--10.0.x-dev.patch"
       }
     }
   }
