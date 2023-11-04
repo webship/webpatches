@@ -37,6 +37,10 @@
       "web-root": "web/"
     },
     "patches": {
+      "drupal/core": {
+        "Issue #3397897: Add Drupal Recipes patch for Drupal core": 
+        "web/modules/contrib/webpatches/patches/drupal-recipes-2023-06-20--10.0-89ea95f4.patch"
+      },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
