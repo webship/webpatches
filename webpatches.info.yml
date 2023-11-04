@@ -2,4 +2,4 @@ name: Web Patches
 type: module
 description: Provides additional functionality for the site.
 package: webship
-core_version_requirement: ^10
+core_version_requirement: ~10.1.0
