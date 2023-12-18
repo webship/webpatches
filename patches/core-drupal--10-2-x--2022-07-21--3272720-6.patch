@@ -1,0 +1,31 @@
+diff --git a/core/lib/Drupal/Core/Entity/Sql/DefaultTableMapping.php b/core/lib/Drupal/Core/Entity/Sql/DefaultTableMapping.php
+index 7cc5cb2f97a45c9bb23c835a9693a70a58204e53..8af27da26bc7ebd38801795156b0de9810d4d129 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/DefaultTableMapping.php
++++ b/core/lib/Drupal/Core/Entity/Sql/DefaultTableMapping.php
+@@ -569,7 +569,7 @@ public function getDedicatedDataTableName(FieldStorageDefinitionInterface $stora
+       // with table names longer than 64 characters, we hash the unique storage
+       // identifier and return the first 10 characters so we end up with a short
+       // unique ID.
+-      return "field_deleted_data_" . substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier()), 0, 10);
++      return "field_deleted_data_" . substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier() ?? ''), 0, 10);
+     }
+     else {
+       return $this->generateFieldTableName($storage_definition, FALSE);
+@@ -595,7 +595,7 @@ public function getDedicatedRevisionTableName(FieldStorageDefinitionInterface $s
+       // up with table names longer than 64 characters, we hash the unique
+       // storage identifier and return the first 10 characters so we end up with
+       // a short unique ID.
+-      return "field_deleted_revision_" . substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier()), 0, 10);
++      return "field_deleted_revision_" . substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier() ?? ''), 0, 10);
+     }
+     else {
+       return $this->generateFieldTableName($storage_definition, TRUE);
+@@ -628,7 +628,7 @@ protected function generateFieldTableName(FieldStorageDefinitionInterface $stora
+       // Use a shorter separator and a hash of the field storage unique
+       // identifier.
+       $separator = $revision ? '_r__' : '__';
+-      $field_hash = substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier()), 0, 10);
++      $field_hash = substr(hash('sha256', $storage_definition->getUniqueStorageIdentifier() ?? ''), 0, 10);
+ 
+       $table_name = $this->prefix . $entity_type_id . $separator . $field_hash;
+ 

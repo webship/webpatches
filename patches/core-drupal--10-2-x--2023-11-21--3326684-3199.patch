@@ -1,0 +1,52 @@
+From c30bb9e31b9a6b9d40bee2899428a27069e59cdf Mon Sep 17 00:00:00 2001
+From: Mahesh Bandhiya <60576-bmahesh03121@users.noreply.drupalcode.org>
+Date: Thu, 5 Jan 2023 10:31:59 +0000
+Subject: [PATCH 1/2] Fixed Deprecated function: mb_strtolower(): Passing null
+ to parameter
+
+---
+ core/lib/Drupal/Component/Utility/Html.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/lib/Drupal/Component/Utility/Html.php b/core/lib/Drupal/Component/Utility/Html.php
+index 7271519e515d..885d802a872e 100644
+--- a/core/lib/Drupal/Component/Utility/Html.php
++++ b/core/lib/Drupal/Component/Utility/Html.php
+@@ -216,7 +216,7 @@ public static function getUniqueId($id) {
+    * @see self::getUniqueId()
+    */
+   public static function getId($id) {
+-    $id = str_replace([' ', '_', '[', ']'], ['-', '-', '-', ''], mb_strtolower($id));
++    $id = $id ? istr_replace([' ', '_', '[', ']'], ['-', '-', '-', ''], mb_strtolower($id)) : '';
+ 
+     // As defined in http://www.w3.org/TR/html4/types.html#type-name, HTML IDs can
+     // only contain letters, digits ([0-9]), hyphens ("-"), underscores ("_"),
+-- 
+GitLab
+
+
+From 9e37e5b926601df7b2fd94d00e6e6504b227a395 Mon Sep 17 00:00:00 2001
+From: Mahesh Bandhiya <60576-bmahesh03121@users.noreply.drupalcode.org>
+Date: Thu, 5 Jan 2023 11:15:22 +0000
+Subject: [PATCH 2/2] Fixes the deprecation
+
+---
+ core/lib/Drupal/Component/Utility/Html.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/lib/Drupal/Component/Utility/Html.php b/core/lib/Drupal/Component/Utility/Html.php
+index 885d802a872e..539c1c866506 100644
+--- a/core/lib/Drupal/Component/Utility/Html.php
++++ b/core/lib/Drupal/Component/Utility/Html.php
+@@ -216,7 +216,7 @@ public static function getUniqueId($id) {
+    * @see self::getUniqueId()
+    */
+   public static function getId($id) {
+-    $id = $id ? istr_replace([' ', '_', '[', ']'], ['-', '-', '-', ''], mb_strtolower($id)) : '';
++    $id = $id ? str_replace([' ', '_', '[', ']'], ['-', '-', '-', ''], mb_strtolower($id)) : '';
+ 
+     // As defined in http://www.w3.org/TR/html4/types.html#type-name, HTML IDs can
+     // only contain letters, digits ([0-9]), hyphens ("-"), underscores ("_"),
+-- 
+GitLab
+

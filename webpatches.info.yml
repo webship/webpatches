@@ -1,5 +1,4 @@
 name: Web Patches
 type: module
-description: Provides additional functionality for the site.
-package: webship
-core_version_requirement: ~10.1.0
+description: Provides additional local patching functionality for websites.
+core_version_requirement: ~10.2.0

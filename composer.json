@@ -1,6 +1,6 @@
 {
   "name": "drupal/webpatches",
-  "description": "Modules Patches.",
+  "description": "Provides additional local patching functionality for websites.",
   "type": "drupal-module",
   "homepage": "https://www.drupal.org/project/webpatches",
   "license": "GPL-2.0-or-later",
@@ -23,9 +23,10 @@
     }
   },
   "require": {
-    "composer/installers": "~2.0",
-    "oomphinc/composer-installers-extender": "~2.0",
-    "cweagans/composer-patches": "~1.0"
+    "composer/installers": "~2",
+    "oomphinc/composer-installers-extender": "~2",
+    "cweagans/composer-patches": "~1",
+    "drupal/core": "~10.2.0"
   },
   "extra": {
     "enable-patching": true,
@@ -39,7 +40,15 @@
     "patches": {
       "drupal/core": {
         "Issue #3397897: Add Drupal Recipes patch for Drupal core": 
-        "web/modules/contrib/webpatches/patches/drupal-recipes-2023-06-20--10.0-89ea95f4.patch"
+        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-12-14--3397897-89ea95f4.patch",
+        "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
+        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2022-07-21--3272720-6.patch",
+        "Issue #3326684: Fix PHP8.1+ Deprecated function: mb_strtolower(): Passing null to parameter #1 ($string) of type string is deprecated":
+        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-11-21--3326684-3199.patch",
+        "Issue #3302838: Fix PHP8.1+ Querying with NULL values results in warning mb_strtolower(): Passing null to parameter is deprecated":
+        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-07-05--3302838-38.patch",
+        "Issue #3049332: Fix PHP message: Error: Call to a member function getEntityTypeId() on null (Layout Builder)":
+        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-06-12--3049332-82.diff"
       },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
