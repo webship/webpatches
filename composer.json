@@ -39,8 +39,8 @@
     },
     "patches": {
       "drupal/core": {
-        "Issue #3397897: Add Drupal Recipes patch for Drupal core": 
-        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-12-14--3397897-89ea95f4.patch",
+        "Issue #3410330: Switch the local patch to have Recipes functionality applied to Drupal core from the Distributions and Recipes project": 
+        "https://git.drupalcode.org/project/distributions_recipes/-/raw/patch/recipe-10.2.x.patch",
         "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
         "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2022-07-21--3272720-6.patch",
         "Issue #3326684: Fix PHP8.1+ Deprecated function: mb_strtolower(): Passing null to parameter #1 ($string) of type string is deprecated":
