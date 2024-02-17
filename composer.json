@@ -25,6 +25,7 @@
   "require": {
     "composer/installers": "~2",
     "oomphinc/composer-installers-extender": "~2",
+    "symplify/vendor-patches": "~11",
     "cweagans/composer-patches": "~2",
     "drupal/core": "~10.2.0"
   },
