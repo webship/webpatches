@@ -26,17 +26,11 @@
     "composer/installers": "~2",
     "oomphinc/composer-installers-extender": "~2",
     "cweagans/composer-patches": "~2",
-    "drupal/core": "~10.3.0"
+    "drupal/core": "~11.0.0"
   },
   "extra": {
     "enable-patching": true,
     "composer-exit-on-patch-failure": true,
-    "patchLevel": {
-      "drupal/core": "-p2"
-    },
-    "locations": {
-      "web-root": "web/"
-    },
     "patches": {
       "drupal/core": {
         "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
