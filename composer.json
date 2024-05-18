@@ -25,9 +25,8 @@
   "require": {
     "composer/installers": "~2",
     "oomphinc/composer-installers-extender": "~2",
-    "symplify/vendor-patches": "~11",
     "cweagans/composer-patches": "~2",
-    "drupal/core": "~10.2.0"
+    "drupal/core": "~10.3.0"
   },
   "extra": {
     "enable-patching": true,
@@ -40,20 +39,18 @@
     },
     "patches": {
       "drupal/core": {
-        "Issue #3410330: Switch the local patch to have Recipes functionality applied to Drupal core from the Distributions and Recipes project": 
-        "https://git.drupalcode.org/project/distributions_recipes/-/raw/patch/recipe-10.2.x.patch",
         "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
-        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2022-07-21--3272720-6.patch",
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2022-07-21--3272720-6.patch",
         "Issue #3326684: Fix PHP8.1+ Deprecated function: mb_strtolower(): Passing null to parameter #1 ($string) of type string is deprecated":
-        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-11-21--3326684-3199.patch",
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-11-21--3326684-3199.patch",
         "Issue #3302838: Fix PHP8.1+ Querying with NULL values results in warning mb_strtolower(): Passing null to parameter is deprecated":
-        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-07-05--3302838-38.patch",
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-07-05--3302838-38.patch",
         "Issue #3049332: Fix PHP message: Error: Call to a member function getEntityTypeId() on null (Layout Builder)":
-        "web/modules/contrib/webpatches/patches/core-drupal--10-2-x--2023-06-12--3049332-82.diff"
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-06-12--3049332-82.diff"
       },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
-        "web/modules/contrib/webpatches/patches/default_content-2021-04-07--3160146-37.patch"
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/default_content-2021-04-07--3160146-37.patch"
       }
     }
   }
