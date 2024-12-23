@@ -1,4 +1,4 @@
 name: Web Patches
 type: module
 description: Provides additional local patching functionality for websites.
-core_version_requirement: ~10.3.0
+core_version_requirement: ~10.4.0
