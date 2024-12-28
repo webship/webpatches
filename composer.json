@@ -48,7 +48,7 @@
       },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
-        "https://git.drupalcode.org/project/webpatches/-/raw/patches/default_content-2021-04-07--3160146-37.patch"
+        "https://www.drupal.org/files/issues/2024-12-02/default_content--2024-12-02--3160146--mr-15.patch"
       }
     }
   }
