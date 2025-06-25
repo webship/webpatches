@@ -36,9 +36,7 @@
         "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
         "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2022-07-21--3272720-6.patch",
         "Issue #3302838: Fix PHP8.1+ Querying with NULL values results in warning mb_strtolower(): Passing null to parameter is deprecated":
-        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-07-05--3302838-38.patch",
-        "Issue #3049332: Fix PHP message: Error: Call to a member function getEntityTypeId() on null (Layout Builder)":
-        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-06-12--3049332-82.diff"
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/core-drupal--10-2-x--2023-07-05--3302838-38.patch"
       },
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
