@@ -40,6 +40,10 @@
       "drupal/dashboards": {
         "fix: #3542888 PHP 8.4 Support":
         "https://git.drupalcode.org/project/webpatches/-/raw/patches/dashboards--2026-01-24--3542888--mr-40.patch"
+      },
+      "drupal/views_bulk_edit": {
+        "Issue #3561886 : Implicit nullable AccountInterface parameters for PHP 8.4 compatibility":
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/views_bulk_edit--2026-01-25--3561886.patch"
       }
     }
   }
