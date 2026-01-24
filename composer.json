@@ -23,14 +23,9 @@
     }
   },
   "require": {
-    "composer/installers": "~2",
-    "oomphinc/composer-installers-extender": "~2",
-    "cweagans/composer-patches": "~2",
     "drupal/core": "~11.3.0"
   },
   "extra": {
-    "enable-patching": true,
-    "composer-exit-on-patch-failure": true,
     "patches": {
       "drupal/core": {
         "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName":
@@ -41,6 +36,10 @@
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "https://git.drupalcode.org/project/webpatches/-/raw/patches/default_content-2021-04-07--3160146-37.patch"
+      },
+      "drupal/dashboards": {
+        "fix: #3542888 PHP 8.4 Support":
+        "https://git.drupalcode.org/project/webpatches/-/raw/patches/dashboards--2026-01-24--3542888--mr-40.patch"
       }
     }
   }
