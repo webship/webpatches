@@ -36,10 +36,6 @@
       "drupal/default_content": {
         "Issue #3160146: Add Layout Builder Normalizer and Denormalize": 
         "https://git.drupalcode.org/project/webpatches/-/raw/patches/default_content-2021-04-07--3160146-37.patch"
-      },
-      "drupal/views_bulk_edit": {
-        "Issue #3561886 : Implicit nullable AccountInterface parameters for PHP 8.4 compatibility":
-        "https://git.drupalcode.org/project/webpatches/-/raw/patches/views_bulk_edit--2026-01-25--3561886.patch"
       }
     }
   }
