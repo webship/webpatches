@@ -590,11 +590,12 @@ class PatchesCollector implements PatchesCollectorInterface {
    */
   protected function matchesAny(string $name, array $patterns): bool {
     foreach ($patterns as $pattern) {
-      // The Composer plugin matches these patterns with fnmatch(), so the
-      // report has to use it too, or it would list a different set of
-      // patches than the one Composer applies.
-      // phpcs:ignore Drupal.Functions.DiscouragedFunctions.Discouraged
-      if (fnmatch((string) $pattern, $name)) {
+      // The Composer plugin matches these patterns with fnmatch(). fnmatch()
+      // is discouraged (unavailable on some platforms), so mirror its
+      // semantics with a regular expression: * matches any run of
+      // characters, ? matches a single character, everything else literal.
+      $regex = '{^' . strtr(preg_quote((string) $pattern, '{'), ['\*' => '.*', '\?' => '.']) . '$}';
+      if (preg_match($regex, $name)) {
         return TRUE;
       }
     }
