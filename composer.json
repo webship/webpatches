@@ -23,6 +23,6 @@
     }
   },
   "require": {
-    "drupal/core": "^11"
+    "drupal/core": "^11.1"
   }
 }

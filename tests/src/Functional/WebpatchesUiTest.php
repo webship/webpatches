@@ -14,7 +14,7 @@ class WebpatchesUiTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['webpatches'];
+  protected static $modules = ['webpatches', 'help'];
 
   /**
    * {@inheritdoc}
@@ -35,6 +35,16 @@ class WebpatchesUiTest extends BrowserTestBase {
     $this->assertSession()->pageTextContains('Ignored patches');
     $this->assertSession()->pageTextContains('Patching sources');
     $this->assertSession()->pageTextContains('patches.lock.json');
+  }
+
+  /**
+   * Tests that the help page renders through the OOP hook.
+   */
+  public function testHelpPage(): void {
+    $this->drupalLogin($this->drupalCreateUser(['access help pages']));
+    $this->drupalGet('admin/help/webpatches');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains('Web Patches shows the patches and the ignored patches declared for this site.');
   }
 
   /**
