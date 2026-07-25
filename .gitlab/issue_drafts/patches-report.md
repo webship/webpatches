@@ -57,4 +57,4 @@ New config object `webpatches.settings` with `sources`, `custom_file_path` and `
 
 ### Release notes snippet
 
-feat: [#PLACEHOLDER](https://git.drupalcode.org/project/webpatches/-/work_items/PLACEHOLDER) Show the declared and ignored patches of the site in the admin UI
+feat: [#3590369](https://git.drupalcode.org/project/webpatches/-/work_items/3590369) Show the declared and ignored patches of the site in the admin UI
