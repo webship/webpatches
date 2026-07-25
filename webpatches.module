@@ -14,7 +14,7 @@ function webpatches_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.webpatches':
       $output = '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Web Patches shows the patches and the ignored patches declared for this site. Patches are applied by Composer, through cweagans/composer-patches and the webship/webship-patches Composer plugin. This module reads the same declarations and applies the same allowlist and ignore rules, so you can see what is declared and what is filtered out.') . '</p>';
+      $output .= '<p>' . t('Web Patches shows the patches and the ignored patches declared for this site. Patches are applied by Composer, through cweagans/composer-patches and the webship/patches Composer plugin. This module reads the same declarations and applies the same allowlist and ignore rules, so you can see what is declared and what is filtered out.') . '</p>';
       $output .= '<h3>' . t('Uses') . '</h3>';
       $output .= '<dl>';
       $output .= '<dt>' . t('Reviewing the patches of a site') . '</dt>';

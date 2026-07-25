@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\TranslationInterface;
  * Reads the patches and the ignored patches declared for this site.
  *
  * The module never applies patches itself. Composer does that, through
- * cweagans/composer-patches and the webship/webship-patches Composer plugin.
+ * cweagans/composer-patches and the webship/patches Composer plugin.
  * This service reads the same declarations Composer reads, and applies the
  * same allowlist and ignore rules, so the site owner can see which patches
  * are declared and which of them are filtered out.
@@ -22,11 +22,11 @@ class PatchesCollector implements PatchesCollectorInterface {
   /**
    * Packages whose extra.patches are applied when no allowlist is configured.
    *
-   * Mirrors the default of the webship/webship-patches Composer plugin.
+   * Mirrors the default of the webship/patches Composer plugin.
    */
   const DEFAULT_ALLOWED_DEPENDENCY_PATCHES = [
-    'webship/webship-patches',
-    'webship/drupal-core-patches',
+    'webship/patches',
+    'webship/drupal-patches',
   ];
 
   /**
@@ -189,7 +189,7 @@ class PatchesCollector implements PatchesCollectorInterface {
     }
 
     // 4. The patches contributed by installed dependency packages, filtered
-    //    the same way the webship/webship-patches Composer plugin filters
+    //    the same way the webship/patches Composer plugin filters
     //    them.
     if ($sources[self::SOURCE_DEPENDENCIES]['enabled']) {
       $this->addDependencyPatches($patches, $ignored, $root_extra);

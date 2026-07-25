@@ -4,7 +4,7 @@ Web Patches ships a hard-coded `extra.patches` list in its own `composer.json`, 
 
 At the same time the module offers no way for a site owner to see which patches are actually declared for their site, or which declared patches are filtered out before Composer applies them.
 
-Patch curation for Webship now lives in `webship/webship-patches` and `webship/drupal-core-patches`, which is where a curated list belongs. What Web Patches is missing is the other half: the report.
+Patch curation for Webship now lives in `webship/patches` and `webship/drupal-patches`, which is where a curated list belongs. What Web Patches is missing is the other half: the report.
 
 Steps to reproduce
 
@@ -18,7 +18,7 @@ Steps to reproduce
 - Remove the `patches` branch, which is only referenced by that list.
 - Add a report at **Reports → Web Patches** (`/admin/reports/webpatches`, permission *View the Web Patches report*) listing the declaration sources, every declared patch with the package and the source that declared it, and every ignored patch with the reason it is not applied.
 - Read the same declarations Composer reads: the root `composer.json`, the file referenced by `extra.patches-file` (`patches.composer.json`), an extra file at a configurable path, and the `extra.patches` of installed dependency packages.
-- Apply the same allowlist and ignore rules the `webship/webship-patches` Composer plugin applies — `extra.composer-patches.allowed-dependency-patches`, `extra.composer-patches.ignore-dependency-patches` and `extra.patches-ignore` — so the report matches what Composer actually does.
+- Apply the same allowlist and ignore rules the `webship/patches` Composer plugin applies — `extra.composer-patches.allowed-dependency-patches`, `extra.composer-patches.ignore-dependency-patches` and `extra.patches-ignore` — so the report matches what Composer actually does.
 - Add a settings form at **Configuration → Development → Web Patches** (permission *Administer Web Patches*) to choose the sources and the custom file path, and to limit the report to packages installed on the site.
 
 The module still does not apply, download or write patches. Composer does that.

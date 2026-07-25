@@ -6,7 +6,7 @@ Web Patches shows the patches and the ignored patches declared for a site.
 
 Patches themselves are applied by Composer, through
 [`cweagans/composer-patches`](https://github.com/cweagans/composer-patches) and the
-[`webship/webship-patches`](https://github.com/webship/webship-patches) Composer plugin.
+[`webship/patches`](https://github.com/webship/patches) Composer plugin.
 This module does not apply, download or write patches. It reads the same declarations
 Composer reads and applies the same allowlist and ignore rules, so a site owner can see
 what is declared for the site and what is filtered out.
@@ -53,8 +53,8 @@ When that key is absent the default allowlist is used:
   "extra": {
     "composer-patches": {
       "allowed-dependency-patches": [
-        "webship/webship-patches",
-        "webship/drupal-core-patches"
+        "webship/patches",
+        "webship/drupal-patches"
       ]
     }
   }
@@ -67,9 +67,9 @@ A single patch of an allowed package can be dropped with `extra.patches-ignore`:
 {
   "extra": {
     "patches-ignore": {
-      "webship/webship-patches": {
+      "webship/patches": {
         "drupal/redirect": [
-          "https://raw.githubusercontent.com/webship/webship-patches/refs/heads/patches/redirect--2026-07-05--2879648--mr-202.patch"
+          "https://raw.githubusercontent.com/webship/patches/refs/heads/patches/redirect--2026-07-05--2879648--mr-202.patch"
         ]
       }
     }

@@ -118,7 +118,7 @@ class PatchesCollectorTest extends UnitTestCase {
     $this->writeJson('composer.lock', [
       'packages' => [
         [
-          'name' => 'webship/webship-patches',
+          'name' => 'webship/patches',
           'version' => '11.0.29',
           'extra' => [
             'patches' => [
@@ -142,7 +142,7 @@ class PatchesCollectorTest extends UnitTestCase {
     $patches = $collector->getPatches();
     $this->assertCount(1, $patches);
     $this->assertSame('drupal/redirect', $patches[0]['package']);
-    $this->assertSame('webship/webship-patches', $patches[0]['provider']);
+    $this->assertSame('webship/patches', $patches[0]['provider']);
 
     $ignored = $collector->getIgnoredPatches();
     $this->assertCount(1, $ignored);
@@ -159,7 +159,7 @@ class PatchesCollectorTest extends UnitTestCase {
     $this->writeJson('composer.json', [
       'extra' => [
         'patches-ignore' => [
-          'webship/webship-patches' => [
+          'webship/patches' => [
             'drupal/redirect' => ['https://example.com/dropped.patch'],
           ],
         ],
@@ -168,7 +168,7 @@ class PatchesCollectorTest extends UnitTestCase {
     $this->writeJson('composer.lock', [
       'packages' => [
         [
-          'name' => 'webship/webship-patches',
+          'name' => 'webship/patches',
           'version' => '11.0.29',
           'extra' => [
             'patches' => [

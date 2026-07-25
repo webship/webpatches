@@ -95,7 +95,7 @@ class WebpatchesSettingsForm extends ConfigFormBase {
     $form['sources'][PatchesCollectorInterface::SOURCE_DEPENDENCIES] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Installed dependency packages'),
-      '#description' => $this->t('The patches contributed by installed packages such as webship/webship-patches and webship/drupal-core-patches, filtered by the allowlist and the ignore rules of the root composer.json.'),
+      '#description' => $this->t('The patches contributed by installed packages such as webship/patches and webship/drupal-patches, filtered by the allowlist and the ignore rules of the root composer.json.'),
       '#default_value' => !empty($sources[PatchesCollectorInterface::SOURCE_DEPENDENCIES]),
     ];
 
