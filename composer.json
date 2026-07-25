@@ -23,6 +23,6 @@
     }
   },
   "require": {
-    "drupal/core": "~11.4.0"
+    "drupal/core": "^11"
   }
 }
