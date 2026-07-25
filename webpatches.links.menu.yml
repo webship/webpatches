@@ -1,0 +1,11 @@
+webpatches.list:
+  route_name: webpatches.list
+  title: 'Web Patches'
+  description: 'The list of patches and ignored patches declared for this site.'
+  parent: system.admin_reports
+
+webpatches.settings:
+  route_name: webpatches.settings
+  title: 'Web Patches'
+  description: 'Configure which patch declarations the Web Patches report reads.'
+  parent: system.admin_config_development

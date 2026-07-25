@@ -1,0 +1,26 @@
+webpatches.settings:
+  type: config_object
+  label: 'Web Patches settings'
+  mapping:
+    sources:
+      type: mapping
+      label: 'Patch declaration sources'
+      mapping:
+        root_composer:
+          type: boolean
+          label: 'Read the root composer.json'
+        patches_composer:
+          type: boolean
+          label: 'Read the patches file (patches.composer.json)'
+        custom_file:
+          type: boolean
+          label: 'Read the custom patches file'
+        dependency_packages:
+          type: boolean
+          label: 'Read the patches of installed dependency packages'
+    custom_file_path:
+      type: string
+      label: 'Custom patches file path'
+    only_installed_packages:
+      type: boolean
+      label: 'Only list patches for packages installed on this site'

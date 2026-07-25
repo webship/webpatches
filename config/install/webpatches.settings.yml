@@ -1,0 +1,7 @@
+sources:
+  root_composer: true
+  patches_composer: true
+  custom_file: false
+  dependency_packages: true
+custom_file_path: ''
+only_installed_packages: true

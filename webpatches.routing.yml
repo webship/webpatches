@@ -1,0 +1,19 @@
+webpatches.list:
+  path: '/admin/reports/webpatches'
+  defaults:
+    _controller: '\Drupal\webpatches\Controller\PatchesController::listPatches'
+    _title: 'Web Patches'
+  requirements:
+    _permission: 'view webpatches report'
+  options:
+    _admin_route: TRUE
+
+webpatches.settings:
+  path: '/admin/config/development/webpatches'
+  defaults:
+    _form: '\Drupal\webpatches\Form\WebpatchesSettingsForm'
+    _title: 'Web Patches'
+  requirements:
+    _permission: 'administer webpatches'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,4 @@
+services:
+  webpatches.collector:
+    class: Drupal\webpatches\PatchesCollector
+    arguments: ['%app.root%', '@config.factory', '@string_translation']

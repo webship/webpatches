@@ -1,4 +1,6 @@
 name: Web Patches
 type: module
 description: Provides additional local patching functionality for websites.
+package: Webship
 core_version_requirement: ~11.4.0
+configure: webpatches.settings

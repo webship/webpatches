@@ -1,0 +1,8 @@
+view webpatches report:
+  title: 'View the Web Patches report'
+  description: 'View the list of patches and ignored patches declared for this site.'
+
+administer webpatches:
+  title: 'Administer Web Patches'
+  description: 'Configure which patch declarations the Web Patches report reads.'
+  restrict access: TRUE
