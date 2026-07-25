@@ -127,11 +127,11 @@ class PatchesCollectorTest extends UnitTestCase {
           ],
         ],
         [
-          'name' => 'some/other-package',
+          'name' => 'drupal/ai_context',
           'version' => '1.0.0',
           'extra' => [
             'patches' => [
-              'drupal/coffee' => ['Issue #4: A patch from an unlisted package' => 'https://example.com/other.patch'],
+              'drupal/canvas' => ['Issue #3567225: A patch AI Context declares itself' => 'https://example.com/canvas.patch'],
             ],
           ],
         ],
@@ -146,7 +146,7 @@ class PatchesCollectorTest extends UnitTestCase {
 
     $ignored = $collector->getIgnoredPatches();
     $this->assertCount(1, $ignored);
-    $this->assertSame('some/other-package', $ignored[0]['provider']);
+    $this->assertSame('drupal/ai_context', $ignored[0]['provider']);
     $this->assertNull($ignored[0]['package']);
   }
 
@@ -248,6 +248,140 @@ class PatchesCollectorTest extends UnitTestCase {
 
     $this->assertCount(1, $patches);
     $this->assertSame(PatchesCollectorInterface::SOURCE_CUSTOM, $patches[0]['source']);
+  }
+
+  /**
+   * Tests that the module's own package is never reported.
+   *
+   * Published releases of the module used to carry a leftover extra.patches
+   * block; the reporter must not present its own stale metadata as an
+   * ignored patching source.
+   *
+   * @covers ::getPatchProviders
+   * @covers ::getIgnoredPatches
+   */
+  public function testOwnPackageIsNotReported(): void {
+    $this->writeJson('composer.json', []);
+    $this->writeJson('composer.lock', [
+      'packages' => [
+        [
+          'name' => 'drupal/webpatches',
+          'version' => '1.0.0',
+          'extra' => [
+            'patches' => [
+              'drupal/core' => ['Issue #3272720: A stale patch' => 'https://example.com/stale.patch'],
+            ],
+          ],
+        ],
+        [
+          'name' => 'drupal/ai_context',
+          'version' => '1.0.0',
+          'extra' => [
+            'patches' => [
+              'drupal/canvas' => ['Issue #3567225: A patch AI Context declares itself' => 'https://example.com/canvas.patch'],
+            ],
+          ],
+        ],
+      ],
+    ]);
+
+    $collector = $this->collector();
+    $providers = array_column($collector->getPatchProviders(), 'package');
+    $this->assertSame(['drupal/ai_context'], $providers);
+
+    $ignored_providers = array_column($collector->getIgnoredPatches(), 'provider');
+    $this->assertSame(['drupal/ai_context'], $ignored_providers);
+    $this->assertNotContains('drupal/webpatches', $ignored_providers);
+  }
+
+  /**
+   * Tests the allowed / not allowed verdict for each patching package.
+   *
+   * @covers ::getPatchProviders
+   */
+  public function testPatchProviders(): void {
+    $this->writeJson('composer.json', [
+      'extra' => [
+        'composer-patches' => [
+          // blocked/* is allowlisted, so the ignore rule is what excludes it.
+          'allowed-dependency-patches' => ['webship/patches', 'blocked/*'],
+          'ignore-dependency-patches' => ['blocked/*'],
+        ],
+      ],
+    ]);
+    $this->writeJson('composer.lock', [
+      'packages' => [
+        [
+          'name' => 'webship/patches',
+          'version' => '11.0.x-dev',
+          'extra' => [
+            'patches' => [
+              'drupal/redirect' => ['Issue #1234567: One' => 'https://example.com/a.patch'],
+              'drupal/coffee' => ['Issue #1234568: Two' => 'https://example.com/b.patch'],
+            ],
+          ],
+        ],
+        [
+          'name' => 'blocked/package',
+          'version' => '1.0.0',
+          'extra' => ['patches' => ['drupal/foo' => ['Issue #1234569: Three' => 'https://example.com/c.patch']]],
+        ],
+        [
+          'name' => 'some/other',
+          'version' => '2.0.0',
+          'extra' => ['patches' => ['drupal/bar' => ['Issue #1234570: Four' => 'https://example.com/d.patch']]],
+        ],
+        ['name' => 'no/patches', 'version' => '1.0.0'],
+      ],
+    ]);
+
+    $providers = $this->collector()->getPatchProviders();
+    $this->assertCount(3, $providers, 'A package with no patches is not a patching source.');
+
+    $by_name = array_column($providers, NULL, 'package');
+
+    $this->assertTrue($by_name['webship/patches']['allowed']);
+    $this->assertSame(2, $by_name['webship/patches']['count']);
+    $this->assertSame('11.0.x-dev', $by_name['webship/patches']['version']);
+
+    $this->assertFalse($by_name['blocked/package']['allowed']);
+    $this->assertStringContainsString('ignore-dependency-patches', (string) $by_name['blocked/package']['reason']);
+
+    $this->assertFalse($by_name['some/other']['allowed']);
+    $this->assertStringContainsString('allowed-dependency-patches', (string) $by_name['some/other']['reason']);
+
+    // Allowed packages sort first.
+    $this->assertSame('webship/patches', $providers[0]['package']);
+  }
+
+  /**
+   * Tests which patches file Composer Patches would read.
+   *
+   * @covers ::getSources
+   */
+  public function testPatchesFileResolution(): void {
+    // Composer Patches v2 reads extra.composer-patches.patches-file.
+    $this->writeJson('composer.json', [
+      'extra' => ['composer-patches' => ['patches-file' => 'custom-v2.json']],
+    ]);
+    $sources = $this->collector()->getSources();
+    $this->assertStringEndsWith('/custom-v2.json', $sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]['path']);
+
+    // The v1 top level key is honoured too.
+    $this->writeJson('composer.json', ['extra' => ['patches-file' => 'custom-v1.json']]);
+    $sources = $this->collector()->getSources();
+    $this->assertStringEndsWith('/custom-v1.json', $sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]['path']);
+
+    // With nothing declared, an existing conventional file is found.
+    $this->writeJson('composer.json', []);
+    $this->writeJson('patches.composer.json', ['patches' => []]);
+    $sources = $this->collector()->getSources();
+    $this->assertStringEndsWith('/patches.composer.json', $sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]['path']);
+
+    // patches.json is the v2 default and wins over the other convention.
+    $this->writeJson('patches.json', ['patches' => []]);
+    $sources = $this->collector()->getSources();
+    $this->assertStringEndsWith('/patches.json', $sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]['path']);
   }
 
 }

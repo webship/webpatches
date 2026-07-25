@@ -82,8 +82,8 @@ class WebpatchesSettingsForm extends ConfigFormBase {
     ];
     $form['sources'][PatchesCollectorInterface::SOURCE_PATCHES_FILE] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Patches file (patches.composer.json)'),
-      '#description' => $this->t('The file referenced by extra.patches-file in the root composer.json, which defaults to patches.composer.json.'),
+      '#title' => $this->t('Patches file'),
+      '#description' => $this->t('The separate patches file Composer Patches reads: extra.composer-patches.patches-file (version 2, default patches.json) or the top level extra.patches-file (version 1).'),
       '#default_value' => !empty($sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]),
     ];
     $form['sources'][PatchesCollectorInterface::SOURCE_CUSTOM] = [

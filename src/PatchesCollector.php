@@ -30,6 +30,15 @@ class PatchesCollector implements PatchesCollectorInterface {
   ];
 
   /**
+   * The module's own Composer package.
+   *
+   * Published releases of this module used to carry a leftover extra.patches
+   * block. The module is the reporter, not a patching source, so its own
+   * stale metadata is never reported — neither as a provider nor as ignored.
+   */
+  const OWN_PACKAGE = 'drupal/webpatches';
+
+  /**
    * The app root.
    *
    * @var string
@@ -110,7 +119,7 @@ class PatchesCollector implements PatchesCollectorInterface {
     ];
     $sources[self::SOURCE_PATCHES_FILE] = [
       'id' => self::SOURCE_PATCHES_FILE,
-      'label' => $this->t('Patches file (patches.composer.json)'),
+      'label' => $this->t('Patches file'),
       'path' => $this->getPatchesFilePath(),
       'enabled' => !empty($enabled[self::SOURCE_PATCHES_FILE]),
     ];
@@ -148,6 +157,55 @@ class PatchesCollector implements PatchesCollectorInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getPatchProviders(): array {
+    $root = $this->getProjectRoot();
+    $root_extra = $root ? ($this->readJson($root . '/composer.json')['extra'] ?? []) : [];
+    $composer_patches = $root_extra['composer-patches'] ?? [];
+    $allowed = (array) ($composer_patches['allowed-dependency-patches'] ?? self::DEFAULT_ALLOWED_DEPENDENCY_PATCHES);
+    $ignored = (array) ($composer_patches['ignore-dependency-patches'] ?? []);
+
+    $providers = [];
+    foreach ($this->getLockedPackages() as $package) {
+      $name = $package['name'] ?? NULL;
+      $declared = $package['extra']['patches'] ?? [];
+      if ($name === NULL || $name === self::OWN_PACKAGE || !is_array($declared) || $declared === []) {
+        continue;
+      }
+
+      $count = 0;
+      foreach ($declared as $target_patches) {
+        $count += is_array($target_patches) ? count($target_patches) : 1;
+      }
+
+      if (!$this->matchesAny($name, $allowed)) {
+        $is_allowed = FALSE;
+        $reason = $this->t('Not in extra.composer-patches.allowed-dependency-patches.');
+      }
+      elseif ($this->matchesAny($name, $ignored)) {
+        $is_allowed = FALSE;
+        $reason = $this->t('Matched by extra.composer-patches.ignore-dependency-patches.');
+      }
+      else {
+        $is_allowed = TRUE;
+        $reason = $this->t('In extra.composer-patches.allowed-dependency-patches.');
+      }
+
+      $providers[] = [
+        'package' => $name,
+        'version' => $package['version'] ?? '',
+        'count' => $count,
+        'allowed' => $is_allowed,
+        'reason' => $reason,
+      ];
+    }
+
+    usort($providers, fn(array $a, array $b) => [!$a['allowed'], $a['package']] <=> [!$b['allowed'], $b['package']]);
+    return $providers;
+  }
+
+  /**
    * Collects the patches and the ignored patches.
    *
    * @return array
@@ -169,14 +227,16 @@ class PatchesCollector implements PatchesCollectorInterface {
 
     // 1. The root composer.json.
     if ($sources[self::SOURCE_ROOT]['enabled']) {
-      $this->addDeclaredPatches($patches, $root_extra['patches'] ?? [], self::SOURCE_ROOT, NULL);
+      $declared = $root_extra['patches'] ?? [];
+      $this->addDeclaredPatches($patches, is_array($declared) ? $declared : [], self::SOURCE_ROOT, NULL);
     }
 
     // 2. The patches file referenced by extra.patches-file, which is
     //    conventionally patches.composer.json next to the root composer.json.
     if ($sources[self::SOURCE_PATCHES_FILE]['enabled'] && $sources[self::SOURCE_PATCHES_FILE]['found']) {
       $data = $this->readJson($sources[self::SOURCE_PATCHES_FILE]['path']);
-      $this->addDeclaredPatches($patches, $data['patches'] ?? [], self::SOURCE_PATCHES_FILE, NULL);
+      $declared = $data['patches'] ?? [];
+      $this->addDeclaredPatches($patches, is_array($declared) ? $declared : [], self::SOURCE_PATCHES_FILE, NULL);
     }
 
     // 3. The extra patches file configured in the module settings.
@@ -185,7 +245,7 @@ class PatchesCollector implements PatchesCollectorInterface {
       // Accept both a bare {"patches": {...}} file and a composer.json shaped
       // file that carries the list under extra.patches.
       $declared = $data['patches'] ?? ($data['extra']['patches'] ?? []);
-      $this->addDeclaredPatches($patches, $declared, self::SOURCE_CUSTOM, NULL);
+      $this->addDeclaredPatches($patches, is_array($declared) ? $declared : [], self::SOURCE_CUSTOM, NULL);
     }
 
     // 4. The patches contributed by installed dependency packages, filtered
@@ -265,7 +325,7 @@ class PatchesCollector implements PatchesCollectorInterface {
     foreach ($this->getLockedPackages() as $package) {
       $name = $package['name'] ?? NULL;
       $declared = $package['extra']['patches'] ?? [];
-      if ($name === NULL || !is_array($declared) || $declared === []) {
+      if ($name === NULL || $name === self::OWN_PACKAGE || !is_array($declared) || $declared === []) {
         continue;
       }
 
@@ -365,7 +425,16 @@ class PatchesCollector implements PatchesCollectorInterface {
   }
 
   /**
-   * Returns the path of the patches file declared by extra.patches-file.
+   * Returns the path of the patches file Composer Patches would read.
+   *
+   * The key moved between the two Composer Patches versions:
+   * - v2 reads extra.composer-patches.patches-file, defaulting to
+   *   "patches.json".
+   * - v1 read a top level extra.patches-file, with no default.
+   *
+   * An explicit declaration always wins. With none, the first conventional
+   * file that exists is used, so a site using either convention is reported
+   * correctly.
    *
    * @return string|null
    *   The absolute path, or NULL when the project root is unknown.
@@ -376,8 +445,23 @@ class PatchesCollector implements PatchesCollectorInterface {
       return NULL;
     }
     $extra = $this->readJson($root . '/composer.json')['extra'] ?? [];
-    $declared = $extra['patches-file'] ?? 'patches.composer.json';
-    return $this->resolvePath((string) $declared);
+
+    $declared = $extra['composer-patches']['patches-file']
+      ?? $extra['patches-file']
+      ?? NULL;
+    if ($declared !== NULL) {
+      return $this->resolvePath((string) $declared);
+    }
+
+    foreach (['patches.json', 'patches.composer.json'] as $candidate) {
+      $path = $this->resolvePath($candidate);
+      if ($path !== NULL && is_file($path)) {
+        return $path;
+      }
+    }
+    // Nothing on disk: report the version 2 default so the Sources table
+    // names the file Composer would look for.
+    return $this->resolvePath('patches.json');
   }
 
   /**

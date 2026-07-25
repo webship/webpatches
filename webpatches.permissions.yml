@@ -1,8 +1,9 @@
 view webpatches report:
   title: 'View the Web Patches report'
-  description: 'View the list of patches and ignored patches declared for this site.'
+  description: 'View the list of patches and ignored patches declared for this site. The report reveals server file paths and installed package versions.'
+  restrict access: TRUE
 
 administer webpatches:
   title: 'Administer Web Patches'
-  description: 'Configure which patch declarations the Web Patches report reads.'
+  description: 'Configure which patch declarations the Web Patches report reads, including an arbitrary file path on the server.'
   restrict access: TRUE

@@ -18,7 +18,7 @@ function webpatches_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<h3>' . t('Uses') . '</h3>';
       $output .= '<dl>';
       $output .= '<dt>' . t('Reviewing the patches of a site') . '</dt>';
-      $output .= '<dd>' . t('The report at Reports &gt; Web Patches lists every declared patch with the package it applies to and the source it was declared in, followed by the patches that are declared but not applied.') . '</dd>';
+      $output .= '<dd>' . t('The report at Reports &gt; Web Patches lists the patching sources (declaration files and the installed packages that declare patches, with the allowlist verdict for each), every declared patch with links to its drupal.org project, issue and merge request when those can be derived, and the patches that are declared but not applied, with the reason.') . '</dd>';
       $output .= '<dt>' . t('Choosing the sources') . '</dt>';
       $output .= '<dd>' . t('Configuration &gt; Development &gt; Web Patches selects which declarations are read: the root composer.json, the patches file referenced by extra.patches-file, a custom patches file, and the patches contributed by installed dependency packages.') . '</dd>';
       $output .= '</dl>';

@@ -2,9 +2,11 @@
 
 namespace Drupal\webpatches\Controller;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\webpatches\PatchLinks;
 use Drupal\webpatches\PatchesCollectorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -50,6 +52,7 @@ class PatchesController extends ControllerBase {
     $only_installed = (bool) $this->config('webpatches.settings')->get('only_installed_packages');
 
     $build = [];
+    $build['#attached']['library'][] = 'webpatches/admin';
     $build['intro'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
@@ -101,6 +104,12 @@ class PatchesController extends ControllerBase {
   protected function buildSourcesTable(array $sources): array {
     $rows = [];
     foreach ($sources as $source) {
+      // The dependency source is the resolved lock file rather than a patch
+      // declaration file, and every patch it contributes already names its
+      // declaring package in the Patches table.
+      if ($source['id'] === PatchesCollectorInterface::SOURCE_DEPENDENCIES) {
+        continue;
+      }
       if (!$source['enabled']) {
         $status = $this->t('Disabled');
       }
@@ -119,13 +128,70 @@ class PatchesController extends ControllerBase {
 
     return [
       '#type' => 'details',
-      '#title' => $this->t('Sources'),
+      '#title' => $this->t('Patching sources'),
       '#open' => FALSE,
+      'files_title' => [
+        '#type' => 'html_tag',
+        '#tag' => 'h3',
+        '#value' => $this->t('Declaration files'),
+      ],
       'table' => [
         '#type' => 'table',
         '#header' => [$this->t('Source'), $this->t('File'), $this->t('Status')],
         '#rows' => $rows,
         '#empty' => $this->t('No sources are enabled.'),
+      ],
+      'providers' => $this->buildProvidersTable(),
+    ];
+  }
+
+  /**
+   * Builds the table of installed packages that declare patches.
+   *
+   * @return array
+   *   A render array.
+   */
+  protected function buildProvidersTable(): array {
+    $rows = [];
+    foreach ($this->patchesCollector->getPatchProviders() as $provider) {
+      $rows[] = [
+        'data' => [
+          ['data' => $this->buildPackageCell($provider['package'])],
+          ['data' => ['#plain_text' => $provider['version']]],
+          ['data' => ['#plain_text' => (string) $provider['count']]],
+          [
+            'data' => $provider['allowed']
+              ? ['#markup' => $this->t('Allowed')]
+              : ['#markup' => $this->t('Not allowed')],
+          ],
+          ['data' => $provider['reason']],
+        ],
+        'class' => [$provider['allowed'] ? 'color-success' : 'color-warning'],
+      ];
+    }
+
+    return [
+      'title' => [
+        '#type' => 'html_tag',
+        '#tag' => 'h3',
+        '#value' => $this->t('Packages declaring patches'),
+      ],
+      'description' => [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('An installed package only contributes its patches when it is in the allowlist and is not matched by the ignore rules.'),
+      ],
+      'table' => [
+        '#type' => 'table',
+        '#header' => [
+          $this->t('Package'),
+          $this->t('Version'),
+          $this->t('Patches'),
+          $this->t('Status'),
+          $this->t('Reason'),
+        ],
+        '#rows' => $rows,
+        '#empty' => $this->t('No installed package declares patches.'),
       ],
     ];
   }
@@ -143,9 +209,8 @@ class PatchesController extends ControllerBase {
     $rows = [];
     foreach ($patches as $patch) {
       $rows[] = [
-        ['data' => $patch['package']],
-        ['data' => $patch['description']],
-        ['data' => $this->buildPatchLink($patch['url'])],
+        ['data' => $this->buildPackageCell($patch['package'])],
+        ['data' => $this->buildPatchCell($patch)],
         ['data' => $this->sourceLabel($patch)],
       ];
     }
@@ -159,12 +224,102 @@ class PatchesController extends ControllerBase {
         '#header' => [
           $this->t('Package'),
           $this->t('Patch'),
-          $this->t('File'),
           $this->t('Declared in'),
         ],
         '#rows' => $rows,
         '#empty' => $this->t('No patches are declared for this site.'),
       ],
+    ];
+  }
+
+  /**
+   * Builds the cell naming the patched package.
+   *
+   * @param string $package
+   *   The Composer package name.
+   *
+   * @return array
+   *   A render array linking to the project page where one can be derived.
+   */
+  protected function buildPackageCell(string $package): array {
+    $url = PatchLinks::packageUrl($package);
+    if ($url === NULL) {
+      return ['#plain_text' => $package];
+    }
+    return [
+      '#type' => 'link',
+      '#title' => $package,
+      '#url' => Url::fromUri($url),
+      '#attributes' => ['target' => '_blank', 'rel' => 'noopener noreferrer'],
+    ];
+  }
+
+  /**
+   * Builds the cell describing a patch.
+   *
+   * The description comes first, with any drupal.org issue reference turned
+   * into a link, and the patch file underneath it alongside a link to the
+   * merge request when the file name carries its id.
+   *
+   * @param array $patch
+   *   A patch as returned by the collector.
+   *
+   * @return array
+   *   A render array.
+   */
+  protected function buildPatchCell(array $patch): array {
+    $build = [];
+    $build['description'] = $this->buildDescription($patch['description']);
+
+    $meta = [];
+    $meta['file'] = $this->buildPatchLink($patch['url']);
+
+    $merge_request = PatchLinks::mergeRequestUrl($patch['package'], $patch['url']);
+    if ($merge_request !== NULL) {
+      $meta['separator'] = ['#plain_text' => ' · '];
+      $meta['merge_request'] = [
+        '#type' => 'link',
+        '#title' => $this->t('MR !@id', ['@id' => PatchLinks::mergeRequestId($patch['url'])]),
+        '#url' => Url::fromUri($merge_request),
+        '#attributes' => ['target' => '_blank', 'rel' => 'noopener noreferrer'],
+      ];
+    }
+
+    $build['meta'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['webpatches-patch-meta']],
+    ] + $meta;
+
+    return $build;
+  }
+
+  /**
+   * Builds a patch description with its issue reference linked.
+   *
+   * @param string $description
+   *   The patch description.
+   *
+   * @return array
+   *   A render array. The description is split around the issue reference so
+   *   every part is rendered as plain text and never as markup.
+   */
+  protected function buildDescription(string $description): array {
+    $issue = PatchLinks::issueId($description);
+    if ($issue === NULL) {
+      return ['#plain_text' => $description];
+    }
+
+    $token = '#' . $issue;
+    $position = strpos($description, $token);
+    return [
+      'before' => ['#plain_text' => substr($description, 0, $position)],
+      'issue' => [
+        '#type' => 'link',
+        '#title' => $token,
+        '#url' => Url::fromUri('https://www.drupal.org/node/' . $issue),
+        '#attributes' => ['target' => '_blank', 'rel' => 'noopener noreferrer'],
+      ],
+      'after' => ['#plain_text' => substr($description, $position + strlen($token))],
     ];
   }
 
@@ -181,9 +336,21 @@ class PatchesController extends ControllerBase {
     $rows = [];
     foreach ($ignored as $patch) {
       $rows[] = [
-        ['data' => $patch['package'] ?: $this->t('All patches')],
-        ['data' => $patch['description'] ?: $this->t('n/a')],
-        ['data' => $patch['provider'] ?: $this->t('n/a')],
+        [
+          'data' => $patch['package']
+            ? $this->buildPackageCell($patch['package'])
+            : ['#markup' => $this->t('All patches')],
+        ],
+        [
+          'data' => $patch['description']
+            ? $this->buildPatchCell($patch)
+            : ['#markup' => $this->t('n/a')],
+        ],
+        [
+          'data' => $patch['provider']
+            ? $this->buildPackageCell($patch['provider'])
+            : ['#markup' => $this->t('n/a')],
+        ],
         ['data' => $patch['reason']],
       ];
     }
@@ -212,12 +379,15 @@ class PatchesController extends ControllerBase {
    * @param string $url
    *   The patch URL or relative path.
    *
-   * @return array|string
-   *   A render array for remote patches, the raw path otherwise.
+   * @return array
+   *   A render array: a link for a remote patch, the plain path for a local
+   *   one.
    */
-  protected function buildPatchLink(string $url) {
-    if (!preg_match('#^https?://#', $url)) {
-      return $url;
+  protected function buildPatchLink(string $url): array {
+    // Patch URLs come out of composer.json files on disk. Only well formed
+    // http(s) URLs become links; anything else is shown as plain text.
+    if (!preg_match('#^https?://#', $url) || !UrlHelper::isValid($url, TRUE)) {
+      return ['#plain_text' => $url];
     }
     return [
       '#type' => 'link',

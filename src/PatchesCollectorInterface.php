@@ -70,6 +70,22 @@ interface PatchesCollectorInterface {
   public function getIgnoredPatches(): array;
 
   /**
+   * Returns the installed packages that declare patches.
+   *
+   * These are the dependency patching sources Composer Patches resolves,
+   * each with the verdict of the allowlist and the ignore rules.
+   *
+   * @return array[]
+   *   A list of providers, each with:
+   *   - package: The declaring package.
+   *   - version: The installed version.
+   *   - count: How many patches it declares.
+   *   - allowed: Whether its patches are applied.
+   *   - reason: Why it is allowed or not.
+   */
+  public function getPatchProviders(): array;
+
+  /**
    * Returns the absolute path of the Composer project root.
    *
    * @return string|null

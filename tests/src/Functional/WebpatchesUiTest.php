@@ -33,7 +33,7 @@ class WebpatchesUiTest extends BrowserTestBase {
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->pageTextContains('Patches');
     $this->assertSession()->pageTextContains('Ignored patches');
-    $this->assertSession()->pageTextContains('Sources');
+    $this->assertSession()->pageTextContains('Patching sources');
   }
 
   /**
