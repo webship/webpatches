@@ -60,11 +60,18 @@ class PatchesCollector implements PatchesCollectorInterface {
   protected $projectRoot;
 
   /**
-   * The collected patches and ignored patches.
+   * The collected patches and ignored patches, after the display filter.
    *
    * @var array|null
    */
   protected $collected;
+
+  /**
+   * The full collected set, before the only-installed display filter.
+   *
+   * @var array|null
+   */
+  protected $collectedAll;
 
   /**
    * Constructs a PatchesCollector object.
@@ -160,6 +167,10 @@ class PatchesCollector implements PatchesCollectorInterface {
    * {@inheritdoc}
    */
   public function getPatchProviders(): array {
+    $sources = $this->getSources();
+    if (empty($sources[self::SOURCE_DEPENDENCIES]['enabled'])) {
+      return [];
+    }
     $root = $this->getProjectRoot();
     $root_extra = $root ? ($this->readJson($root . '/composer.json')['extra'] ?? []) : [];
     $composer_patches = $root_extra['composer-patches'] ?? [];
@@ -203,6 +214,61 @@ class PatchesCollector implements PatchesCollectorInterface {
 
     usort($providers, fn(array $a, array $b) => [!$a['allowed'], $a['package']] <=> [!$b['allowed'], $b['package']]);
     return $providers;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLockStatus(): array {
+    $root = $this->getProjectRoot();
+    $path = $root ? $root . '/patches.lock.json' : NULL;
+
+    $this->collect();
+    $declared = [];
+    foreach ($this->collectedAll['patches'] as $patch) {
+      $declared[$patch['package'] . '|' . $patch['url']] = [
+        'package' => $patch['package'],
+        'description' => $patch['description'],
+        'url' => $patch['url'],
+      ];
+    }
+
+    $status = [
+      'path' => $path,
+      'found' => $path !== NULL && is_file($path),
+      'in_sync' => NULL,
+      'missing' => [],
+      'stale' => [],
+      'lock_count' => 0,
+      'declared_count' => count($declared),
+    ];
+    if (!$status['found']) {
+      return $status;
+    }
+
+    $locked = [];
+    foreach ($this->readJson($path)['patches'] ?? [] as $target => $entries) {
+      if (!is_array($entries)) {
+        continue;
+      }
+      foreach ($entries as $entry) {
+        if (!is_array($entry) || !isset($entry['url'])) {
+          continue;
+        }
+        $package = (string) ($entry['package'] ?? $target);
+        $locked[$package . '|' . $entry['url']] = [
+          'package' => $package,
+          'description' => (string) ($entry['description'] ?? ''),
+          'url' => (string) $entry['url'],
+        ];
+      }
+    }
+    $status['lock_count'] = count($locked);
+
+    $status['missing'] = array_values(array_diff_key($declared, $locked));
+    $status['stale'] = array_values(array_diff_key($locked, $declared));
+    $status['in_sync'] = $status['missing'] === [] && $status['stale'] === [];
+    return $status;
   }
 
   /**
@@ -264,13 +330,15 @@ class PatchesCollector implements PatchesCollectorInterface {
         : isset($installed[$patch['package']]);
     }
 
+    usort($patches, fn(array $a, array $b) => [$a['package'], $a['description']] <=> [$b['package'], $b['description']]);
+    usort($ignored, fn(array $a, array $b) => [(string) $a['package'], (string) $a['description']] <=> [(string) $b['package'], (string) $b['description']]);
+
+    $this->collectedAll = ['patches' => $patches, 'ignored' => $ignored];
+
     if ($only_installed) {
       $patches = array_values(array_filter($patches, fn(array $p) => $p['installed']));
       $ignored = array_values(array_filter($ignored, fn(array $p) => $p['installed']));
     }
-
-    usort($patches, fn(array $a, array $b) => [$a['package'], $a['description']] <=> [$b['package'], $b['description']]);
-    usort($ignored, fn(array $a, array $b) => [(string) $a['package'], (string) $a['description']] <=> [(string) $b['package'], (string) $b['description']]);
 
     $this->collected = ['patches' => $patches, 'ignored' => $ignored];
     return $this->collected;

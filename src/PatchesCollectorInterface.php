@@ -86,6 +86,32 @@ interface PatchesCollectorInterface {
   public function getPatchProviders(): array;
 
   /**
+   * Checks patches.lock.json against the declarations.
+   *
+   * Composer Patches v2 resolves the declarations into patches.lock.json and
+   * applies from the lock, so a missing or stale lock means the site is not
+   * running the patches its composer.json declares.
+   *
+   * The comparison uses the full declared set, ignoring the
+   * only-installed-packages display filter, because the lock always carries
+   * every resolved patch.
+   *
+   * @return array
+   *   An array with:
+   *   - path: The lock file path, or NULL when the project root is unknown.
+   *   - found: Whether the lock file exists.
+   *   - in_sync: TRUE when the lock matches the declarations, FALSE when it
+   *     does not, NULL when there is no lock file to compare.
+   *   - missing: Patches declared but absent from the lock, each with
+   *     package, description and url.
+   *   - stale: Patches in the lock but no longer declared, each with
+   *     package, description and url.
+   *   - lock_count: How many patches the lock carries.
+   *   - declared_count: How many patches are declared and allowed.
+   */
+  public function getLockStatus(): array;
+
+  /**
    * Returns the absolute path of the Composer project root.
    *
    * @return string|null

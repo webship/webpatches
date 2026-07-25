@@ -70,6 +70,7 @@ class PatchesController extends ControllerBase {
     }
 
     $build['sources'] = $this->buildSourcesTable($sources);
+    $build['lock'] = $this->buildLockSection();
     $build['patches'] = $this->buildPatchesTable($patches);
     $build['ignored'] = $this->buildIgnoredTable($ignored);
 
@@ -152,6 +153,8 @@ class PatchesController extends ControllerBase {
    *   A render array.
    */
   protected function buildProvidersTable(): array {
+    $sources = $this->patchesCollector->getSources();
+    $dependencies_enabled = !empty($sources[PatchesCollectorInterface::SOURCE_DEPENDENCIES]['enabled']);
     $rows = [];
     foreach ($this->patchesCollector->getPatchProviders() as $provider) {
       $rows[] = [
@@ -191,9 +194,85 @@ class PatchesController extends ControllerBase {
           $this->t('Reason'),
         ],
         '#rows' => $rows,
-        '#empty' => $this->t('No installed package declares patches.'),
+        '#empty' => $dependencies_enabled
+          ? $this->t('No installed package declares patches.')
+          : $this->t('The Installed dependency packages source is disabled, so no package contributes patches.'),
       ],
     ];
+  }
+
+  /**
+   * Builds the section reporting the state of patches.lock.json.
+   *
+   * @return array
+   *   A render array.
+   */
+  protected function buildLockSection(): array {
+    $status = $this->patchesCollector->getLockStatus();
+
+    if (!$status['found']) {
+      return [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'warning' => [
+            $this->t('patches.lock.json was not found at @path. Composer Patches v2 resolves the declarations into this lock and applies from it — run composer install to create it. (Composer Patches v1 keeps no lock file.)', [
+              '@path' => $status['path'] ?? $this->t('the project root'),
+            ]),
+          ],
+        ],
+      ];
+    }
+
+    if ($status['in_sync']) {
+      return [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'status' => [
+            $this->t('patches.lock.json is in sync with the declarations (@count patches).', [
+              '@count' => $status['lock_count'],
+            ]),
+          ],
+        ],
+      ];
+    }
+
+    $build = [
+      'message' => [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'warning' => [
+            $this->t('patches.lock.json is out of sync with the declarations: @missing declared but not locked, @stale locked but no longer declared. Run composer install (or composer update on the affected packages) to re-resolve the lock.', [
+              '@missing' => count($status['missing']),
+              '@stale' => count($status['stale']),
+            ]),
+          ],
+        ],
+      ],
+    ];
+
+    foreach (['missing' => $this->t('Declared but not in the lock'), 'stale' => $this->t('In the lock but no longer declared')] as $key => $title) {
+      if ($status[$key] === []) {
+        continue;
+      }
+      $rows = [];
+      foreach ($status[$key] as $patch) {
+        $rows[] = [
+          ['data' => $this->buildPackageCell($patch['package'])],
+          ['data' => $this->buildPatchCell($patch)],
+        ];
+      }
+      $build[$key] = [
+        '#type' => 'details',
+        '#title' => $this->t('@title (@count)', ['@title' => $title, '@count' => count($status[$key])]),
+        '#open' => TRUE,
+        'table' => [
+          '#type' => 'table',
+          '#header' => [$this->t('Package'), $this->t('Patch')],
+          '#rows' => $rows,
+        ],
+      ];
+    }
+    return $build;
   }
 
   /**

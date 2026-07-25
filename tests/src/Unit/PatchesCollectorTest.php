@@ -384,6 +384,129 @@ class PatchesCollectorTest extends UnitTestCase {
     $this->assertStringEndsWith('/patches.json', $sources[PatchesCollectorInterface::SOURCE_PATCHES_FILE]['path']);
   }
 
+  /**
+   * Tests the patches.lock.json sync check.
+   *
+   * @covers ::getLockStatus
+   */
+  public function testLockStatus(): void {
+    $this->writeJson('composer.json', []);
+    $this->writeJson('composer.lock', [
+      'packages' => [
+        [
+          'name' => 'webship/patches',
+          'version' => '11.0.29',
+          'extra' => [
+            'patches' => [
+              'drupal/redirect' => ['Issue #2879648: One' => 'https://example.com/a.patch'],
+              'drupal/coffee' => ['Issue #3535874: Two' => 'https://example.com/b.patch'],
+            ],
+          ],
+        ],
+      ],
+    ]);
+
+    // No lock file at all.
+    $status = $this->collector()->getLockStatus();
+    $this->assertFalse($status['found']);
+    $this->assertNull($status['in_sync']);
+    $this->assertSame(2, $status['declared_count']);
+
+    // A lock in sync with the declarations.
+    $this->writeJson('patches.lock.json', [
+      'patches' => [
+        'drupal/redirect' => [
+          ['package' => 'drupal/redirect', 'description' => 'Issue #2879648: One', 'url' => 'https://example.com/a.patch'],
+        ],
+        'drupal/coffee' => [
+          ['package' => 'drupal/coffee', 'description' => 'Issue #3535874: Two', 'url' => 'https://example.com/b.patch'],
+        ],
+      ],
+    ]);
+    $status = $this->collector()->getLockStatus();
+    $this->assertTrue($status['found']);
+    $this->assertTrue($status['in_sync']);
+    $this->assertSame(2, $status['lock_count']);
+
+    // A stale lock: one declared patch missing, one leftover locked patch.
+    $this->writeJson('patches.lock.json', [
+      'patches' => [
+        'drupal/redirect' => [
+          ['package' => 'drupal/redirect', 'description' => 'Issue #2879648: One', 'url' => 'https://example.com/a.patch'],
+        ],
+        'drupal/removed' => [
+          ['package' => 'drupal/removed', 'description' => 'Issue #1111111: Gone', 'url' => 'https://example.com/gone.patch'],
+        ],
+      ],
+    ]);
+    $status = $this->collector()->getLockStatus();
+    $this->assertFalse($status['in_sync']);
+    $this->assertCount(1, $status['missing']);
+    $this->assertSame('drupal/coffee', $status['missing'][0]['package']);
+    $this->assertCount(1, $status['stale']);
+    $this->assertSame('drupal/removed', $status['stale'][0]['package']);
+  }
+
+  /**
+   * Tests that the display filter does not affect the lock comparison.
+   *
+   * @covers ::getLockStatus
+   */
+  public function testLockStatusIgnoresDisplayFilter(): void {
+    $this->writeJson('composer.json', [
+      'extra' => [
+        'patches' => [
+          'drupal/not_installed' => ['Issue #2222222: Hidden by the filter' => 'https://example.com/h.patch'],
+        ],
+      ],
+    ]);
+    $this->writeJson('composer.lock', ['packages' => []]);
+    $this->writeJson('patches.lock.json', [
+      'patches' => [
+        'drupal/not_installed' => [
+          ['package' => 'drupal/not_installed', 'description' => 'Issue #2222222: Hidden by the filter', 'url' => 'https://example.com/h.patch'],
+        ],
+      ],
+    ]);
+
+    $collector = $this->collector(['only_installed_packages' => TRUE]);
+    $this->assertSame([], $collector->getPatches(), 'The display filter hides the patch.');
+    $this->assertTrue($collector->getLockStatus()['in_sync'], 'The lock comparison still sees it.');
+  }
+
+  /**
+   * Tests that disabling the dependency source empties the provider list.
+   *
+   * @covers ::getPatchProviders
+   */
+  public function testProvidersRespectSourceToggle(): void {
+    $this->writeJson('composer.json', []);
+    $this->writeJson('composer.lock', [
+      'packages' => [
+        [
+          'name' => 'webship/patches',
+          'version' => '11.0.29',
+          'extra' => [
+            'patches' => [
+              'drupal/redirect' => ['Issue #2879648: One' => 'https://example.com/a.patch'],
+            ],
+          ],
+        ],
+      ],
+    ]);
+
+    $this->assertCount(1, $this->collector()->getPatchProviders());
+    $off = $this->collector([
+      'sources' => [
+        PatchesCollectorInterface::SOURCE_ROOT => TRUE,
+        PatchesCollectorInterface::SOURCE_PATCHES_FILE => TRUE,
+        PatchesCollectorInterface::SOURCE_CUSTOM => FALSE,
+        PatchesCollectorInterface::SOURCE_DEPENDENCIES => FALSE,
+      ],
+    ]);
+    $this->assertSame([], $off->getPatchProviders());
+  }
+
 }
 
 /**

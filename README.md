@@ -26,6 +26,8 @@ filtered out.
   description links to the drupal.org issue, and under the description the patch
   file links to the file itself — plus an *MR !id* link to the merge request on
   git.drupalcode.org when the file name carries `--mr-<id>`.
+- **The patch lock** — whether `patches.lock.json` exists and is in sync with
+  the declarations, with the differences listed both ways when it is not.
 - **Ignored patches** — every declared patch that is *not* applied, with the
   reason: the declaring package is not in the allowlist, it is matched by
   `extra.composer-patches.ignore-dependency-patches`, or the patch URL is listed

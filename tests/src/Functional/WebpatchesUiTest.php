@@ -34,6 +34,7 @@ class WebpatchesUiTest extends BrowserTestBase {
     $this->assertSession()->pageTextContains('Patches');
     $this->assertSession()->pageTextContains('Ignored patches');
     $this->assertSession()->pageTextContains('Patching sources');
+    $this->assertSession()->pageTextContains('patches.lock.json');
   }
 
   /**

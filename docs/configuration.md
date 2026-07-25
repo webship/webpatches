@@ -80,3 +80,21 @@ Every link is derived, never fetched:
 
 A description with no issue reference, a file name with no `--mr-<id>`, or a
 non-Drupal package simply renders without that link.
+
+## The patch lock check
+
+Composer Patches v2 resolves the declarations into `patches.lock.json` and
+applies from that lock, so the report compares the two on every load:
+
+- **No lock file** — a warning that the site has no resolved patch state
+  (normal on Composer Patches v1, which keeps no lock file).
+- **In sync** — the lock carries exactly the declared-and-allowed patches.
+- **Out of sync** — the differences are listed both ways: *declared but not in
+  the lock* (a declaration was added or changed since the last
+  `composer install`) and *in the lock but no longer declared* (a leftover from
+  a removed declaration). Either way, re-running `composer install` — or
+  `composer update` on the affected packages — re-resolves the lock.
+
+The comparison uses the full declared set: the *only installed packages*
+display filter never affects it, because the lock always carries every
+resolved patch.
