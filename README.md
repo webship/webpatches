@@ -122,3 +122,6 @@ Both appear on the report under **Ignored patches** with the matching reason.
   the report understands.
 - [Security](docs/security.md) — what the module does and does not do, and why
   both permissions are restricted.
+- [`tests/webship-js/`](tests/webship-js/) — a webship-js (Playwright +
+  Cucumber-js) BDD suite for the report and the settings form, run against a
+  live site: `cd tests/webship-js && npm install && LAUNCH_URL=https://your-site npm test`.
