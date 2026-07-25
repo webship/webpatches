@@ -1,0 +1,19 @@
+{
+  "name": "webpatches-webship-js-tests",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "cucumber-js --config cucumber.js",
+    "test:chromium": "BROWSER=chromium cucumber-js --config cucumber.js",
+    "test:firefox": "BROWSER=firefox cucumber-js --config cucumber.js",
+    "test:webkit": "BROWSER=webkit cucumber-js --config cucumber.js",
+    "test:critical": "cucumber-js --config cucumber.js --tags \"@critical and not @wip\"",
+    "test:headed": "HEADLESS=false SLOW_MO=500 cucumber-js --config cucumber.js",
+    "generate-reports": "generate-reports"
+  },
+  "license": "GPL-2.0-or-later",
+  "description": "webship-js BDD suite for the Web Patches report and settings, run against a live Drupal site with the module installed.",
+  "dependencies": {
+    "webship-js": "^2.0.4"
+  },
+  "private": true
+}
