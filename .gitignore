@@ -3,3 +3,6 @@ node_modules
 /*/node_modules
 # Playwright MCP session artefacts
 .playwright-mcp
+
+# mkdocs privacy-plugin cache
+.cache

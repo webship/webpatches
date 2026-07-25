@@ -118,10 +118,16 @@ Both appear on the report under **Ignored patches** with the matching reason.
 
 ## Documentation
 
+Full documentation: <https://project.pages.drupalcode.org/webpatches/>
+(built with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
+from [`docs/`](docs/) by the GitLab Templates `pages` job).
+
+- [The report](docs/report.md) — every section of the report, with screenshots.
 - [Configuration](docs/configuration.md) — every setting and the Composer keys
   the report understands.
 - [Security](docs/security.md) — what the module does and does not do, and why
   both permissions are restricted.
+- [Testing](docs/testing.md) — the PHPUnit suites and the BDD suite.
 - [`tests/webship-js/`](tests/webship-js/) — a webship-js (Playwright +
   Cucumber-js) BDD suite for the report and the settings form, run against a
   live site: `cd tests/webship-js && npm install && LAUNCH_URL=https://your-site npm test`.

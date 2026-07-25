@@ -1,0 +1,53 @@
+site_name: "Web Patches"
+site_url: "https://project.pages.drupalcode.org/webpatches/"
+repo_url: https://git.drupalcode.org/project/webpatches
+repo_name: drupal/webpatches
+edit_uri: /-/edit/11.0.x/docs/
+
+theme:
+  name: material
+  language: en
+  logo: logo.png
+  favicon: logo.png
+  palette:
+    # Palette toggle for automatic mode.
+    - media: "(prefers-color-scheme)"
+      primary: blue
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    # Palette toggle for light mode.
+    - media: "(prefers-color-scheme: light)"
+      primary: blue
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode.
+    - media: "(prefers-color-scheme: dark)"
+      primary: blue
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - navigation.sections
+    - content.action.edit
+
+nav:
+  - Home: "index.md"
+  - The report: "report.md"
+  - Configuration: "configuration.md"
+  - Security: "security.md"
+  - Testing: "testing.md"
+
+plugins:
+  - search
+  - privacy:
+      enabled: !ENV [CI, false]
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true

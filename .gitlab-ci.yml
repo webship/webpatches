@@ -1,0 +1,26 @@
+################################################################################
+# GitLab CI configuration for the Web Patches module.
+#
+# Uses the Drupal Association's GitLab Templates:
+# https://project.pages.drupalcode.org/gitlab_templates/
+#
+# The included templates provide the standard validation and testing jobs
+# (composer, phpcs, phpstan, cspell, phpunit, …) and the `pages` job, which
+# publishes the mkdocs documentation site from mkdocs.yml + docs/ to
+# https://project.pages.drupalcode.org/webpatches/ whenever a documentation
+# file changes on the default branch.
+################################################################################
+
+include:
+  - project: $_GITLAB_TEMPLATES_REPO
+    ref: $_GITLAB_TEMPLATES_REF
+    file:
+      - "/includes/include.drupalci.main.yml"
+      - "/includes/include.drupalci.variables.yml"
+      - "/includes/include.drupalci.workflows.yml"
+
+variables:
+  # The module requires Drupal ^11.1, so the current core default is right.
+  # Uncomment to also test the next core version:
+  # OPT_IN_TEST_NEXT_MAJOR: '1'
+  _PHPUNIT_CONCURRENT: '1'
