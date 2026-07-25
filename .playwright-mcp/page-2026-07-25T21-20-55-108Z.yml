@@ -1,0 +1,113 @@
+- generic [ref=f2e1]:
+  - banner [active] [ref=f2e2]:
+    - link "Skip to main content" [ref=f2e3] [cursor=pointer]:
+      - /url: "#content-body"
+    - generic [ref=f2e5]:
+      - link "Homepage" [ref=f2e6] [cursor=pointer]:
+        - /url: /
+      - button "Open navigation menu" [ref=f2e14] [cursor=pointer]
+    - button "Search or go to… /" [ref=f2e17] [cursor=pointer]:
+      - generic [ref=f2e18]:
+        - generic [ref=f2e21]: Search or go to…
+        - generic [ref=f2e22]: /
+    - button "Menu" [ref=f2e26] [cursor=pointer]
+  - generic [ref=f2e30]:
+    - navigation [ref=f2e31]:
+      - heading "Primary navigation" [level=2] [ref=f2e32]
+      - generic [ref=f2e33]:
+        - generic [ref=f2e34]: Project
+        - list "Project" [ref=f2e37]:
+          - listitem [ref=f2e38]:
+            - link "webpatches" [ref=f2e39] [cursor=pointer]:
+              - /url: /project/webpatches
+              - img "avatar" [ref=f2e41]
+          - listitem [ref=f2e43]:
+            - button "Manage" [ref=f2e44] [cursor=pointer]
+          - listitem [ref=f2e52]:
+            - button "Plan" [expanded] [ref=f2e53] [cursor=pointer]
+            - list "Plan" [ref=f2e62]:
+              - listitem [ref=f2e63]:
+                - link "Work items" [ref=f2e64] [cursor=pointer]:
+                  - /url: /project/webpatches/-/work_items
+                  - generic [ref=f2e67]: "-"
+              - listitem [ref=f2e69]:
+                - link "Issue boards" [ref=f2e70] [cursor=pointer]:
+                  - /url: /project/webpatches/-/boards
+              - listitem [ref=f2e73]:
+                - link "Milestones" [ref=f2e74] [cursor=pointer]:
+                  - /url: /project/webpatches/-/milestones
+              - listitem [ref=f2e77]:
+                - link "Iterations" [ref=f2e78] [cursor=pointer]:
+                  - /url: /project/webpatches/-/cadences
+              - listitem [ref=f2e81]:
+                - link "Wiki" [ref=f2e82] [cursor=pointer]:
+                  - /url: /project/webpatches/-/wikis
+              - listitem [ref=f2e85]:
+                - link "Requirements" [ref=f2e86] [cursor=pointer]:
+                  - /url: /project/webpatches/-/requirements_management/requirements
+          - listitem [ref=f2e89]:
+            - button "Code" [ref=f2e90] [cursor=pointer]
+          - listitem [ref=f2e98]:
+            - button "Build" [ref=f2e99] [cursor=pointer]
+          - listitem [ref=f2e107]:
+            - button "Deploy" [ref=f2e108] [cursor=pointer]
+          - listitem [ref=f2e116]:
+            - button "Analyze" [ref=f2e117] [cursor=pointer]
+        - button "Help" [ref=f2e130] [cursor=pointer]
+    - generic [ref=f2e136]:
+      - navigation "Breadcrumb" [ref=f2e140]:
+        - list [ref=f2e141]:
+          - listitem [ref=f2e142]:
+            - link "project" [ref=f2e143] [cursor=pointer]:
+              - /url: /project
+            - text: /
+          - listitem [ref=f2e144]:
+            - link "webpatches" [ref=f2e145] [cursor=pointer]:
+              - /url: /project/webpatches
+            - text: /
+          - listitem [ref=f2e147]:
+            - link "Work items" [ref=f2e148] [cursor=pointer]:
+              - /url: /project/webpatches/-/work_items
+      - main [ref=f2e152]:
+        - generic [ref=f2e153]:
+          - generic [ref=f2e154]:
+            - generic [ref=f2e155]:
+              - generic [ref=f2e156]:
+                - button "All items" [ref=f2e157] [cursor=pointer]
+                - list
+                - button "Add view" [ref=f2e159] [cursor=pointer]
+              - generic [ref=f2e163]:
+                - generic "Actions" [ref=f2e164]:
+                  - button "Actions" [ref=f2e165] [cursor=pointer]
+                - link "New item" [ref=f2e170] [cursor=pointer]:
+                  - /url: /project/webpatches/-/work_items/new?type=Issue&initialCreationContext=list-route
+            - generic [ref=f2e172]:
+              - group [ref=f2e174]:
+                - generic "Recent searches history" [ref=f2e176]:
+                  - button "Toggle search history" [ref=f2e177] [cursor=pointer]
+                - generic [ref=f2e185]:
+                  - generic [ref=f2e186] [cursor=pointer]:
+                    - generic [ref=f2e187]: State
+                    - generic [ref=f2e190]: is
+                    - generic [ref=f2e195]:
+                      - generic [ref=f2e196]: Open
+                      - button "Remove" [ref=f2e197]
+                  - textbox "Search" [ref=f2e202]
+                - button "Clear" [ref=f2e203] [cursor=pointer]
+                - button "Search" [ref=f2e207] [cursor=pointer]
+              - group [ref=f2e211]:
+                - combobox "Sort by:" [ref=f2e213] [cursor=pointer]:
+                  - generic [ref=f2e214]: Created date
+                - generic [ref=f2e218]: "Sort by:"
+                - 'button "Sort direction: Descending" [ref=f2e219] [cursor=pointer]'
+          - generic [ref=f2e222]: 0 items
+          - generic [ref=f2e225]:
+            - complementary:
+              - generic [ref=f2e226]:
+                - button "Update selected" [disabled] [ref=f2e227]
+                - button "Cancel" [ref=f2e229] [cursor=pointer]
+            - generic [ref=f2e234]:
+              - heading "No results found" [level=2] [ref=f2e235]
+              - paragraph [ref=f2e236]: To widen your search, change or remove filters above.
+              - link "New item" [ref=f2e239] [cursor=pointer]:
+                - /url: /project/webpatches/-/work_items/new?type=Issue&initialCreationContext=list-route

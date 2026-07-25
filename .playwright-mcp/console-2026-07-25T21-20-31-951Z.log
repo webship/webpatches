@@ -1,0 +1,34 @@
+[    6217ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://git.drupalcode.org/_fs-ch-1T1wmsGaOgGaSxcX/pat?token=AanE9CvkCpPAKYDlfZqj5W33i0CrFLW0xTW0aYMK2TI1xnLjdMbKfLDNH9w9FhophskcAk_th7s7e42M15j3O2pX9EU3vEE3KtUcL5oUOHW3kmfTDDQxHpsh3WVBAiMu9J2zQnVyXvFzpAKf0-t0bNEx69-39Z_g0rOMPFsrqXey6n_AuezEsp8uJZnUsQdNqGYo9b_wtuJX2nEovV5t8B0MyrjdJhG9tDsFMCM1SUwzGqDqopAzZEvVzGdUwXQDGawla-6n6HimwKu4q9SVWLNL6pddjzWlYQz5ZIfpb4yPptJ3kCU-9oBK06zVuBXOY6rpjhngwpYbRnHgFVF2YlGmBDySTOZoAU4jkK8GkkF-rPzeKWICrxHpb8FMsB_Pvg9EkPawPPponUjrSk0H-5Aqqavnyt9_tZ8V_P0MuCx68tOjlgdaHq0yb5N6Ga5Q5xJHsJy6:0
+[    6217ms] [LOG] PAT challenge aborted. @ https://git.drupalcode.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[    6872ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://git.drupalcode.org/fastly/logo:0
+[    6875ms] [LOG] Challenge: RTU2EqGrd7sfB4Vy => 8cef8054b9ba3ef2bc24d91c61edca2ef6c28957f09148bbc50c51c26fbefcb0 @ https://git.drupalcode.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[    6904ms] [LOG] found answer: Tp @ https://git.drupalcode.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   18908ms] [LOG] %cWelcome to GitLab!%c
+
+Does this page need fixes or improvements? Open an issue or contribute a merge request to help make GitLab more lovable. At GitLab, everyone can contribute!
+
+🤝 Contribute to GitLab: https://about.gitlab.com/community/contribute/
+🔎 Create a new GitLab issue: https://gitlab.com/gitlab-org/gitlab/-/issues/new
+ padding-top: 0.5em; font-size: 2em; padding-bottom: 0.5em; @ https://git.drupalcode.org/assets/webpack/hello.b7f494db.chunk.js:0
+[   37735ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://www.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/pat?token=Ae-teTzmluiK2mMusKen-cTAdB9Dcu8FNrOwk9zyhpnLOvhuDi_X_CG8cbFo7g4q8RoNAgu7C4LqCvjyvyxa4dGfs-qaoZIKUfbxOXVQJMINsey8vYP9rW2hWP3HqamPA3S_53ZN0kDWZ4gliS0fDsNcWexE3mOyvWanJ4GEaXo0caqVTfpOWLx4gytakzgoP3nKjyW55vofFyemN5oMOwwkQPfB2DSV19nF0qQg-575Q04bBUP8TBLiKm9paV6RqAkGGrITq98XsJZv4GslmJKTdzLyDv5VQthsOCa6Og9ron6MaSW-WxCBztD4LWO8YNv9EGpqjpA-W22nlgC4Q_XM5vY-CbsphirM_gUniWdZC6o9Ten9vV0CXvamXRUXsgqB_BedlqjTGvNXjQ-qQDtve4tTph8RB4zDedV_Ky_9GHsF2Ze5JTyF98HZ0sTulZdfvqqK:0
+[   37736ms] [LOG] PAT challenge aborted. @ https://www.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   38319ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://www.drupal.org/fastly/logo:0
+[   38322ms] [LOG] Challenge: rVw3fjBKM46om65V => 85a090db9fba2fd65202d6325621b3244303505677959b89c7fe07ddb52f2cb6 @ https://www.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   38353ms] [LOG] found answer: 0p @ https://www.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   40650ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://www.drupal.org/sites/all/themes/bluecheese/fonts/Noto_Sans/NotoSans-Regular.woff @ https://www.drupal.org/user/login?destination=gitlab/jwt:140
+[   40650ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://www.drupal.org/sites/all/themes/bluecheese/fonts/ZT_Gatha/ZTGatha-Bold.woff @ https://www.drupal.org/user/login?destination=gitlab/jwt:140
+[   40665ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://www.drupal.org/sites/all/themes/bluecheese/fonts/Noto_Sans/NotoSans-Light.woff @ https://www.drupal.org/user/login?destination=gitlab/jwt:140
+[   44360ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://www.drupal.org/sites/all/themes/bluecheese/fonts/Noto_Sans/NotoSans-Light.woff @ https://www.drupal.org/user?destination=gitlab/jwt:0
+[   46627ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://accounts.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/pat?token=ARgXb1x5Cq6QA28FVZfOfkza8FjCaaHLpREGB416b7H9dDcEWfGrK-Nr1Sr1UHgjZPAccoHHXRbS08ZdeCkTPf1Zcyy3N-bO5zDAWPqvx3PxtxZE0LxBfcoMj7_3NwgkF2FwCJVLyf-WSgZmzInzeb6NePLT_g8xfzmcvoiij1lgVoxBEkwwYak54AsiBazzcgbmZLd_0boFQRGNTy5DeFrvO9FGPwiBkKVhbIHGqDhHwBpwu8HDeeIpZWWiLzEGNGSYkFwFVv1a94tgkeLzcGkgPSE_x9LKbToWDsWYd6wWVNeVp_1Dxb3YzorohPIJWkzebTFbVTlrKuudwR6z3twlwgx8vNpPi-zTrVyOElwMkjLsicYBVwdCKazmw5Tlt71lHgiKqBSEDEmcoSOSsWmYLxd2n77I20NQbAPPdg1XYWhJ-BkNPbqlgJk8eKKt7trkRuvn:0
+[   46627ms] [LOG] PAT challenge aborted. @ https://accounts.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   46888ms] [LOG] Challenge: CYzN3HXyuJxEM01G => 99e97f2f41ccc32cb628da2a0c316d2536314b19839def4ae371a94daf045e14 @ https://accounts.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   46908ms] [LOG] found answer: y9 @ https://accounts.drupal.org/_fs-ch-1T1wmsGaOgGaSxcX/script.js?reload=true:0
+[   48537ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://accounts.drupal.org/auth/resources/9dbp4/common/keycloak/vendor/patternfly-v5/assets/fonts/webfonts/fa-solid-900.woff2 @ https://accounts.drupal.org/auth/realms/main/protocol/openid-connect/auth?client_id=drupalorg-sso&response_type=code&scope=openid%20email%20profile&redirect_uri=https%3A//www.drupal.org/openid-connect/keycloak&state=GmqdR40b-bLdHVfDuGeXXsaP8vWf2jlABRXh0RWVkWY&prompt=login:237
+[   81515ms] [WARNING] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently @ https://git.drupalcode.org/assets/webpack/main.98361d90.chunk.js:24
+[   81700ms] [LOG] %cWelcome to GitLab!%c
+
+Does this page need fixes or improvements? Open an issue or contribute a merge request to help make GitLab more lovable. At GitLab, everyone can contribute!
+
+🤝 Contribute to GitLab: https://about.gitlab.com/community/contribute/
+🔎 Create a new GitLab issue: https://gitlab.com/gitlab-org/gitlab/-/issues/new
+ padding-top: 0.5em; font-size: 2em; padding-bottom: 0.5em; @ https://git.drupalcode.org/assets/webpack/hello.b7f494db.chunk.js:0

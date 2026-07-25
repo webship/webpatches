@@ -1,26 +1,18 @@
-# feat: Show the declared and ignored patches of the site in the admin UI
+### Problem/Motivation
 
-Ready to file as a work item on <https://git.drupalcode.org/project/webpatches/-/issues>
-(Webship projects use GitLab work items, not the drupal.org node issue queue).
-Matches the `.gitlab/issue_templates/addition.md` shape.
-
----
-
-## Problem/Motivation
-
-Web Patches ships a hard-coded `extra.patches` list in its own `composer.json`, and keeps the patch files on a `patches` branch of the project repository. Every site that installs the module therefore has two Drupal core patches and a Default Content patch forced onto it, whether or not that site wants them.
+Web Patches ships a hard-coded `extra.patches` list in its own `composer.json`, and keeps the patch files on a `patches` branch of this repository. Every site that installs the module has two Drupal core patches and a Default Content patch forced onto it, whether or not that site wants them.
 
 At the same time the module offers no way for a site owner to see which patches are actually declared for their site, or which declared patches are filtered out before Composer applies them.
 
 Patch curation for Webship now lives in `webship/webship-patches` and `webship/drupal-core-patches`, which is where a curated list belongs. What Web Patches is missing is the other half: the report.
 
-## Steps to reproduce
+Steps to reproduce
 
 1. Install `drupal/webpatches` on a Drupal ~11.4.0 site.
 2. Run `composer install` and note that two `drupal/core` patches and a `drupal/default_content` patch are applied, contributed by the module itself.
 3. Look for a page in the admin UI that lists the patches of the site — there is none.
 
-## Proposed resolution
+### Proposed resolution
 
 - Remove `extra.patches` from `composer.json`, so the module stops forcing patches onto the sites that install it.
 - Remove the `patches` branch, which is only referenced by that list.
@@ -31,48 +23,38 @@ Patch curation for Webship now lives in `webship/webship-patches` and `webship/d
 
 The module still does not apply, download or write patches. Composer does that.
 
-## Remaining tasks
-
-- ✅ Remove `extra.patches` from `composer.json`
-- ✅ Add the patches collector service
-- ✅ Add the report and the settings form
-- ✅ Unit and functional test coverage
-- ❌ Delete the `patches` branch on the `drupal` and `github` remotes
-- ❌ Code review and merge
-
-## User interface changes
-
-Two new admin pages:
-
-- **Reports → Web Patches** — the patches report.
-- **Configuration → Development → Web Patches** — the source settings.
-
-Two new permissions: *View the Web Patches report* and *Administer Web Patches*.
-
-## API changes
-
-New service `webpatches.collector` (`\Drupal\webpatches\PatchesCollectorInterface`), which exposes `getSources()`, `getPatches()`, `getIgnoredPatches()` and `getProjectRoot()`.
-
-## Data model changes
-
-New config object `webpatches.settings` with `sources`, `custom_file_path` and `only_installed_packages`.
-
-## Release notes snippet
-
-Web Patches no longer carries its own patch list. It now reports the patches and the ignored patches declared for the site, at Reports → Web Patches, with the sources configurable at Configuration → Development → Web Patches.
-
-## Checkpoints
-
-- [x] File an issue about this project
-- [x] Addition/Change/Update/Fix to this project
+### Checkpoints
+- [x] File an issue
+- [x] Addition for a new supported feature
 - [x] Testing to ensure no regression
-- [x] Automated unit/functional testing coverage
-- [x] Developer Documentation support on feature change/addition
-- [ ] User Guide Documentation support on feature change/addition
-- [ ] Accessibility and Readability
+- [x] Automated unit testing coverage
+- [x] Automated functional testing coverage
+- [ ] UX/UI designer responsibilities
+- [ ] Readability
+- [ ] Accessibility
+- [ ] Performance
+- [ ] Security
+- [x] Documentation
+- [ ] Reviewed by human
 - [ ] Code review by maintainers
 - [ ] Full testing and approval
 - [ ] Credit contributors
 - [ ] Review with the product owner
-- [ ] Update Release Notes
+- [ ] Release Notes
 - [ ] Release
+
+### API changes
+
+New service `webpatches.collector` (`\Drupal\webpatches\PatchesCollectorInterface`), exposing `getSources()`, `getPatches()`, `getIgnoredPatches()` and `getProjectRoot()`.
+
+Two new permissions: *View the Web Patches report* and *Administer Web Patches*.
+
+Two new routes: `webpatches.list` (`/admin/reports/webpatches`) and `webpatches.settings` (`/admin/config/development/webpatches`).
+
+### Data model changes
+
+New config object `webpatches.settings` with `sources`, `custom_file_path` and `only_installed_packages`.
+
+### Release notes snippet
+
+feat: [#PLACEHOLDER](https://git.drupalcode.org/project/webpatches/-/work_items/PLACEHOLDER) Show the declared and ignored patches of the site in the admin UI
