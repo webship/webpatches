@@ -19,9 +19,11 @@ Two tables:
 An installed package only contributes its patches when it matches
 `extra.composer-patches.allowed-dependency-patches` and is not matched by the
 ignore rules. A module that ships its own patches — the
-[AI Context](https://www.drupal.org/project/ai_context) module has declared a
+[AI Context](https://www.drupal.org/project/ai_context) module declares a
 Drupal Canvas patch in its own `composer.json`, for example — shows up here as
-*Not allowed* unless the site allowlists it, and its patch is never applied.
+**Not allowed** unless the site allowlists it, and its patch is never applied:
+
+![drupal/ai_context listed as Not allowed, with the out-of-sync lock warning below](assets/not-allowed-provider.png)
 
 ## The patch lock
 
@@ -37,6 +39,8 @@ applies from that lock, so the report compares the two on every load:
 
 The comparison always uses the full declared set; the *only installed
 packages* display filter never affects it.
+
+![The out-of-sync warning, naming the differences both ways](assets/lock-out-of-sync.png)
 
 ## Patches
 
@@ -60,6 +64,14 @@ Every declared patch that is *not* applied, with the reason: the declaring
 package is not in the allowlist, it is matched by
 `extra.composer-patches.ignore-dependency-patches`, or the patch URL is listed
 in `extra.patches-ignore`.
+
+![Ignored patches: all of ai_context's patches blocked by the allowlist, and one Drupal core patch dropped by patches-ignore](assets/ignored-patches.png)
+
+Here `drupal/ai_context` is not in the allowlist, so **all** of its patches
+are blocked with one row, while a single Drupal core patch declared by
+`webship/drupal-patches` — the nested modals fix — is dropped by
+`extra.patches-ignore`, still fully linked to its issue, file and merge
+request.
 
 By default the report lists only patches for packages installed on the site —
 a note at the bottom says so and links to the
