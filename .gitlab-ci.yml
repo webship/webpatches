@@ -20,7 +20,10 @@ include:
       - "/includes/include.drupalci.workflows.yml"
 
 variables:
-  # The module requires Drupal ^11.1, so the current core default is right.
+  # For now, build and test with Drupal 11.4 and PHP 8.4.
+  DRUPAL_CORE: "11.4.x-dev"
+  _TARGET_PHP: "8.4"
+  # The module allows Drupal ^11.4 || ^12.
   # Uncomment to also test the next core version:
   # OPT_IN_TEST_NEXT_MAJOR: '1'
   _PHPUNIT_CONCURRENT: '1'
