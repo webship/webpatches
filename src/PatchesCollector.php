@@ -361,17 +361,46 @@ class PatchesCollector implements PatchesCollectorInterface {
       if (!is_array($package_patches)) {
         continue;
       }
-      foreach ($package_patches as $description => $url) {
+      foreach ($this->normalizePatchList($package_patches) as [$description, $url]) {
         $patches[] = [
           'package' => (string) $package,
-          'description' => (string) $description,
-          'url' => (string) $url,
+          'description' => $description,
+          'url' => $url,
           'source' => $source,
           'provider' => $provider,
           'installed' => FALSE,
         ];
       }
     }
+  }
+
+  /**
+   * Reads the patches declared for one package, in either Composer format.
+   *
+   * Composer Patches accepts a "description": "url" map, and version 2 also
+   * accepts a list of objects with a "description" and a "url" key.
+   *
+   * @param array $package_patches
+   *   The patches declared for one package.
+   *
+   * @return array[]
+   *   A list of [description, url] pairs. Entries without a URL are skipped.
+   */
+  protected function normalizePatchList(array $package_patches): array {
+    $list = [];
+    foreach ($package_patches as $key => $value) {
+      if (is_array($value)) {
+        if (!isset($value['url']) || !is_string($value['url'])) {
+          continue;
+        }
+        $description = $value['description'] ?? '';
+        $list[] = [is_string($description) ? $description : '', $value['url']];
+      }
+      elseif (is_string($value)) {
+        $list[] = [(string) $key, $value];
+      }
+    }
+    return $list;
   }
 
   /**
@@ -433,12 +462,12 @@ class PatchesCollector implements PatchesCollectorInterface {
         if (!is_array($target_patches)) {
           continue;
         }
-        foreach ($target_patches as $description => $url) {
+        foreach ($this->normalizePatchList($target_patches) as [$description, $url]) {
           $is_ignored = isset($ignored_urls[$target]) && in_array($url, $ignored_urls[$target], TRUE);
           $entry = [
             'package' => (string) $target,
-            'description' => (string) $description,
-            'url' => (string) $url,
+            'description' => $description,
+            'url' => $url,
             'source' => self::SOURCE_DEPENDENCIES,
             'provider' => $name,
             'installed' => FALSE,

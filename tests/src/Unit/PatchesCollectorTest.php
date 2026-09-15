@@ -507,6 +507,76 @@ class PatchesCollectorTest extends UnitTestCase {
     $this->assertSame([], $off->getPatchProviders());
   }
 
+  /**
+   * Tests that the Composer Patches 2.x list format is read everywhere.
+   *
+   * @covers ::getPatches
+   * @covers ::getIgnoredPatches
+   * @covers ::getLockStatus
+   */
+  public function testListFormat(): void {
+    $this->writeJson('composer.json', [
+      'extra' => [
+        'patches' => [
+          'drupal/redirect' => [
+            ['description' => 'Issue #2879648: Root list', 'url' => 'https://example.com/root.patch'],
+            ['description' => 'No URL, skipped'],
+          ],
+        ],
+        'patches-ignore' => [
+          'webship/patches' => [
+            'drupal/gin' => ['https://example.com/ignored.patch'],
+          ],
+        ],
+      ],
+    ]);
+    $this->writeJson('composer.lock', [
+      'packages' => [
+        [
+          'name' => 'webship/patches',
+          'version' => '11.0.x-dev',
+          'extra' => [
+            'patches' => [
+              'drupal/coffee' => [
+                ['description' => 'Issue #3535874: Dependency list', 'url' => 'https://example.com/dep.patch'],
+              ],
+              'drupal/gin' => [
+                ['description' => 'Issue #3590827: Ignored', 'url' => 'https://example.com/ignored.patch'],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ]);
+    $this->writeJson('patches.lock.json', [
+      'patches' => [
+        'drupal/redirect' => [
+          ['package' => 'drupal/redirect', 'description' => 'Issue #2879648: Root list', 'url' => 'https://example.com/root.patch'],
+        ],
+        'drupal/coffee' => [
+          ['package' => 'drupal/coffee', 'description' => 'Issue #3535874: Dependency list', 'url' => 'https://example.com/dep.patch'],
+        ],
+      ],
+    ]);
+
+    $collector = $this->collector();
+    $patches = $collector->getPatches();
+    $this->assertCount(2, $patches);
+    $this->assertSame('drupal/coffee', $patches[0]['package']);
+    $this->assertSame('Issue #3535874: Dependency list', $patches[0]['description']);
+    $this->assertSame('https://example.com/dep.patch', $patches[0]['url']);
+    $this->assertSame('webship/patches', $patches[0]['provider']);
+    $this->assertSame('drupal/redirect', $patches[1]['package']);
+    $this->assertSame('Issue #2879648: Root list', $patches[1]['description']);
+    $this->assertSame('https://example.com/root.patch', $patches[1]['url']);
+
+    $ignored = $collector->getIgnoredPatches();
+    $this->assertCount(1, $ignored);
+    $this->assertSame('Issue #3590827: Ignored', $ignored[0]['description']);
+
+    $this->assertTrue($collector->getLockStatus()['in_sync']);
+  }
+
 }
 
 /**
