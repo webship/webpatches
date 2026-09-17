@@ -36,7 +36,7 @@ follow:
 Guard install hooks so a config import does not run them twice:
 
 ```php
-function mymodule_install($is_syncing) {
+function example_module_install($is_syncing) {
   // Configuration imports bring their own configuration.
   if (\Drupal::isConfigSyncing()) {
     return;

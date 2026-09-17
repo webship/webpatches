@@ -1,0 +1,6 @@
+name: 'Web Patches - Default'
+description: 'A recipe to manage default installed modules, configs and permissions.'
+type: install
+install:
+  # The Web Patches module: the report of the patches applied to this site.
+  - webpatches
