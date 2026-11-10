@@ -8,12 +8,20 @@
     "test:webkit": "BROWSER=webkit cucumber-js --config cucumber.js",
     "test:critical": "cucumber-js --config cucumber.js --tags \"@critical and not @wip\"",
     "test:headed": "HEADLESS=false SLOW_MO=500 cucumber-js --config cucumber.js",
-    "generate-reports": "generate-reports"
+    "generate-reports": "generate-reports",
+    "test:dry": "cucumber-js --config cucumber.js --dry-run"
   },
   "license": "GPL-2.0-or-later",
   "description": "webship-js BDD suite for the Web Patches report and settings, run against a live Drupal site with the module installed.",
   "dependencies": {
     "webship-js": "^2.0.4"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@webship-js/drupal-core-steps": "^2.1.0",
+    "webship-js": "^2.0.6"
+  },
+  "engines": {
+    "node": ">= 24.0"
+  }
 }
