@@ -14,13 +14,10 @@
   "license": "GPL-2.0-or-later",
   "description": "webship-js BDD suite for the Web Patches report and settings, run against a live Drupal site with the module installed.",
   "dependencies": {
-    "webship-js": "^2.0.4"
-  },
-  "private": true,
-  "devDependencies": {
     "@webship-js/drupal-core-steps": "^2.1.0",
     "webship-js": "^2.0.6"
   },
+  "private": true,
   "engines": {
     "node": ">= 24.0"
   }
